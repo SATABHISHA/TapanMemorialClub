@@ -304,6 +304,34 @@
         </div>
     </section>
 
+    {{-- ============== FOUNDERS SPOTLIGHT ============== --}}
+    @if(isset($founders) && $founders->count() > 0)
+    <section class="section-pad founders-zone" id="founders">
+        <div class="container position-relative">
+            <div class="section-head text-center" data-aos="fade-up">
+                <span class="eyebrow">Founders Circle</span>
+                <h2>Legacy <span class="gradient-text">Custodians</span></h2>
+                <p>The pillars behind Tapan Memorial Club's identity, discipline, and enduring culture.</p>
+            </div>
+            <div class="founders-grid mt-4">
+                @foreach($founders as $founder)
+                    <article class="founder-card" data-aos="zoom-in-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}">
+                        <div class="founder-media-wrap">
+                            <img src="{{ route('media.show', $founder->media_library_id) }}" alt="{{ $founder->title }}" loading="lazy" decoding="async">
+                            <span class="founder-badge"><i class="bi bi-award-fill"></i> Founder</span>
+                        </div>
+                        <div class="founder-body">
+                            <h5>{{ $founder->title ?: 'Founder, TMC' }}</h5>
+                            <p>Guiding values, resilience, and cricketing stewardship for future generations.</p>
+                        </div>
+                        <div class="founder-shine" aria-hidden="true"></div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     {{-- ============== GALLERY ============== --}}
     <section class="section-pad position-relative" id="gallery">
         <div class="section-blob blob-3"></div>
@@ -331,6 +359,9 @@
                             <div class="gallery-placeholder"><i class="bi bi-image-alt"></i></div>
                         @endif
                         <div class="gallery-overlay">
+                            @if($item->category)
+                                <small class="gallery-category">{{ strtoupper($item->category) }}</small>
+                            @endif
                             <i class="bi bi-arrows-fullscreen"></i>
                             <span>{{ $item->title ?: 'TM Club' }}</span>
                         </div>
