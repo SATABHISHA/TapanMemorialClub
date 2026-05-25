@@ -27,6 +27,21 @@ class HomeController extends Controller
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->get();
+
+        $heroSliders = $sliders->filter(function (Slider $slider): bool {
+            if (! $slider->media_library_id || ! $slider->media) {
+                return false;
+            }
+
+            $width = (int) ($slider->media->width ?? 0);
+            $height = (int) ($slider->media->height ?? 0);
+
+            return $width >= 900 || ($width >= 700 && $height >= 1200);
+        })->values();
+
+        if ($heroSliders->isEmpty()) {
+            $heroSliders = $sliders->filter(fn (Slider $slider): bool => (bool) $slider->media_library_id)->values();
+        }
         $performances = $this->performanceService->listForFrontend();
         $achievements = Achievement::query()->orderByDesc('year')->limit(8)->get();
         $blogs = $this->blogService->latest(6);
@@ -49,6 +64,7 @@ class HomeController extends Controller
 
         return view('frontend.home', compact(
             'sliders',
+            'heroSliders',
             'performances',
             'achievements',
             'blogs',

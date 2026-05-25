@@ -5,7 +5,7 @@
     <section class="hero-section">
         <div class="hero-bg-slider swiper">
             <div class="swiper-wrapper">
-                @forelse($sliders as $slider)
+                @forelse($heroSliders as $slider)
                     @php
                         $hasWideSource = $slider->media && $slider->media->width && $slider->media->width >= 1200 && $slider->media->width >= $slider->media->height;
                         $bgImage = $hasWideSource
@@ -68,7 +68,7 @@
                         <div class="trophy-glow"></div>
                         <div class="swiper hero-swiper">
                             <div class="swiper-wrapper">
-                                @forelse($sliders as $slider)
+                                @forelse($heroSliders as $slider)
                                     <div class="swiper-slide">
                                         <div class="hero-card glass-card">
                                             @if($slider->media_library_id)
