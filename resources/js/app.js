@@ -1,10 +1,12 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+import * as bootstrap from 'bootstrap';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import AOS from 'aos';
 
 window.Alpine = Alpine;
+window.bootstrap = bootstrap;
 Alpine.start();
 
 /* ============ DETAIL PAGE SCROLL RESET ============ */
