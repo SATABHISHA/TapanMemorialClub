@@ -49,3 +49,16 @@ Add cron:
 - Email: admin@tapanmemorialclub.com
 - Password: password
 (Immediately change password in production)
+
+## 9. GitHub Actions CI/CD (Auto Deploy)
+This repository includes `.github/workflows/deploy-hostinger.yml`.
+
+It runs on every push to `main` and executes `./deploy.sh` on Hostinger over SSH.
+
+Set these GitHub repository secrets before enabling auto deploy:
+- `HOSTINGER_HOST` (example: `82.25.106.143`)
+- `HOSTINGER_PORT` (example: `65002`)
+- `HOSTINGER_USERNAME` (example: `u473577775`)
+- `HOSTINGER_PASSWORD` (your SSH password)
+
+After secrets are added, every push to `main` will deploy automatically.
