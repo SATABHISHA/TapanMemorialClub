@@ -195,7 +195,7 @@ function openEditModal(id, title, category, mediaId, isFeatured, displayOrder, t
     document.getElementById('editTitle').value = title;
     document.getElementById('editCategory').value = category;
     document.getElementById('editMediaId').value = mediaId ?? '';
-    document.getElementById('editDisplayOrder').value = displayOrder || '';
+    document.getElementById('editDisplayOrder').value = Number.isFinite(displayOrder) ? displayOrder : 0;
     document.getElementById('editIsFeatured').checked = isFeatured;
     document.getElementById('editImageInput').value = '';
     document.getElementById('editImagePreview').style.display = 'none';

@@ -39,6 +39,10 @@ class GalleryController extends Controller
             'display_order'    => ['nullable', 'integer'],
         ]);
 
+        // DB column is non-nullable; keep a stable integer default.
+        $validated['display_order'] = (int) ($validated['display_order'] ?? 0);
+        $validated['is_featured'] = $request->boolean('is_featured');
+
         if ($request->hasFile('image')) {
             $media = $this->mediaService->upload(
                 $request->file('image'),
@@ -89,6 +93,10 @@ class GalleryController extends Controller
             'is_featured'      => ['nullable', 'boolean'],
             'display_order'    => ['nullable', 'integer'],
         ]);
+
+        // Avoid null writes for non-nullable display_order.
+        $validated['display_order'] = (int) ($validated['display_order'] ?? ($gallery->display_order ?? 0));
+        $validated['is_featured'] = $request->boolean('is_featured');
 
         if ($request->hasFile('image')) {
             $media = $this->mediaService->upload(
