@@ -887,15 +887,19 @@ html.reveal-init [data-section-reveal].is-visible {
 }
 .founders-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(280px, 360px));
 	gap: 1rem;
 	align-items: stretch;
+	justify-content: center;
 }
 .founder-card {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	max-width: 360px;
 	height: 100%;
+	justify-self: center;
 	overflow: hidden;
 	border-radius: 1.2rem;
 	background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -987,6 +991,8 @@ html.reveal-init [data-section-reveal].is-visible {
 }
 
 @media (max-width: 767px) {
+	.founders-grid { grid-template-columns: minmax(0, 1fr); }
+	.founder-card { max-width: 100%; }
 	.founder-media-wrap { height: 280px; padding: 1rem 1rem 2.1rem; }
 }
 @media (max-width: 575.98px) {
