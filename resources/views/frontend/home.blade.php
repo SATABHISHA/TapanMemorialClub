@@ -313,6 +313,14 @@
                 <h2>Legacy <span class="gradient-text">Custodians</span></h2>
                 <p>The pillars behind Tapan Memorial Club's identity, discipline, and enduring culture.</p>
             </div>
+            @php
+                $founderMessages = [
+                    'A steady hand that turned local passion into a disciplined cricketing legacy.',
+                    'Built team spirit through humility, hard work, and unwavering community pride.',
+                    'Carried the club banner with grace, resilience, and a mentor’s heart.',
+                    'Planted values that still guide every young player stepping onto the field.',
+                ];
+            @endphp
             <div class="founders-grid mt-4">
                 @foreach($founders as $founder)
                     <article class="founder-card" data-aos="zoom-in-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}">
@@ -322,7 +330,7 @@
                         </div>
                         <div class="founder-body">
                             <h5>{{ $founder->title ?: 'Founder, TMC' }}</h5>
-                            <p>Guiding values, resilience, and cricketing stewardship for future generations.</p>
+                            <p>{{ $founderMessages[$loop->index % count($founderMessages)] }}</p>
                         </div>
                         <div class="founder-shine" aria-hidden="true"></div>
                     </article>
