@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slider extends Model
@@ -29,5 +30,10 @@ class Slider extends Model
             'is_active' => 'boolean',
             'ken_burns' => 'boolean',
         ];
+    }
+
+    public function media(): BelongsTo
+    {
+        return $this->belongsTo(MediaLibrary::class, 'media_library_id');
     }
 }

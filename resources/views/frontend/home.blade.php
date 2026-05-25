@@ -6,7 +6,13 @@
         <div class="hero-bg-slider swiper">
             <div class="swiper-wrapper">
                 @forelse($sliders as $slider)
-                    <div class="swiper-slide hero-bg-slide" @if($slider->media_library_id) style="background-image: linear-gradient(125deg, rgba(122,15,36,.82) 0%, rgba(21,52,110,.78) 60%, rgba(3,8,26,.85) 100%), url('{{ route('media.show', $slider->media_library_id) }}')" @endif></div>
+                    @php
+                        $hasWideSource = $slider->media && $slider->media->width && $slider->media->width >= 1200 && $slider->media->width >= $slider->media->height;
+                        $bgImage = $hasWideSource
+                            ? route('media.show', $slider->media_library_id)
+                            : asset('assets/images/stadium-bg.jpg');
+                    @endphp
+                    <div class="swiper-slide hero-bg-slide" style="background-image: linear-gradient(125deg, rgba(122,15,36,.82) 0%, rgba(21,52,110,.78) 60%, rgba(3,8,26,.85) 100%), url('{{ $bgImage }}')"></div>
                 @empty
                     <div class="swiper-slide hero-bg-slide" style="background-image: linear-gradient(125deg, rgba(122,15,36,.82) 0%, rgba(21,52,110,.78) 60%, rgba(3,8,26,.85) 100%), url('{{ asset('assets/images/stadium-bg.jpg') }}')"></div>
                 @endforelse
@@ -66,7 +72,15 @@
                                     <div class="swiper-slide">
                                         <div class="hero-card glass-card">
                                             @if($slider->media_library_id)
-                                                <img src="{{ route('media.show', $slider->media_library_id) }}" alt="{{ $slider->title }}">
+                                                <div class="hero-card-media">
+                                                    <span class="hero-card-backdrop" style="background-image: url('{{ route('media.show', $slider->media_library_id) }}')" aria-hidden="true"></span>
+                                                    <img
+                                                        src="{{ route('media.show', $slider->media_library_id) }}"
+                                                        alt="{{ $slider->title }}"
+                                                        @if($loop->first) fetchpriority="high" loading="eager" @else loading="lazy" @endif
+                                                        decoding="async"
+                                                    >
+                                                </div>
                                             @endif
                                             <div class="hero-card-body">
                                                 <span class="hero-card-tag"><i class="bi bi-stars text-warning"></i> Featured</span>

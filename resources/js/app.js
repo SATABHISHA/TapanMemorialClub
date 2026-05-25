@@ -70,26 +70,43 @@ const loadSwiperBundle = () => {
 const heroBgEl = document.querySelector('.hero-bg-slider');
 const heroSwiperEl = document.querySelector('.hero-swiper');
 if (heroBgEl || heroSwiperEl) {
-	loadSwiperBundle().then(({ Swiper, Autoplay, EffectFade, Pagination }) => {
+	loadSwiperBundle().then(({ Swiper, Autoplay, EffectFade, EffectCreative, Pagination, Keyboard }) => {
 		if (heroBgEl) {
 			new Swiper(heroBgEl, {
 				modules: [Autoplay, EffectFade],
 				loop: true,
 				effect: 'fade',
 				fadeEffect: { crossFade: true },
-				speed: 1600,
-				autoplay: { delay: 5500, disableOnInteraction: false },
+				speed: 1800,
+				autoplay: { delay: 6000, disableOnInteraction: false },
 				allowTouchMove: false,
 			});
 		}
 
 		if (heroSwiperEl) {
 			new Swiper(heroSwiperEl, {
-				modules: [Autoplay, EffectFade, Pagination],
+				modules: [Autoplay, EffectCreative, Pagination, Keyboard],
 				loop: true,
-				effect: 'fade',
-				pagination: { el: '.swiper-pagination', clickable: true },
-				autoplay: { delay: 3800, disableOnInteraction: false },
+				effect: 'creative',
+				creativeEffect: {
+					limitProgress: 2,
+					prev: {
+						translate: ['-18%', 0, -220],
+						opacity: 0,
+						scale: 0.92,
+					},
+					next: {
+						translate: ['18%', 0, -220],
+						opacity: 0,
+						scale: 0.92,
+					},
+				},
+				speed: 1050,
+				pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+				keyboard: { enabled: true },
+				autoplay: { delay: 4200, disableOnInteraction: false, pauseOnMouseEnter: true },
+				observer: true,
+				observeParents: true,
 			});
 		}
 	}).catch(() => null);

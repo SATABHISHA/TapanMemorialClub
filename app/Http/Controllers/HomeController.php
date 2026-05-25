@@ -22,7 +22,11 @@ class HomeController extends Controller
 
     public function index(): View
     {
-        $sliders = Slider::query()->where('is_active', true)->orderBy('sort_order')->get();
+        $sliders = Slider::query()
+            ->with('media:id,width,height')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
         $performances = $this->performanceService->listForFrontend();
         $achievements = Achievement::query()->orderByDesc('year')->limit(8)->get();
         $blogs = $this->blogService->latest(6);
