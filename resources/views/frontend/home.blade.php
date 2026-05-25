@@ -73,7 +73,6 @@
                                         <div class="hero-card glass-card">
                                             @if($slider->media_library_id)
                                                 <div class="hero-card-media">
-                                                    <span class="hero-card-backdrop" style="background-image: url('{{ route('media.show', $slider->media_library_id) }}')" aria-hidden="true"></span>
                                                     <img
                                                         src="{{ route('media.show', $slider->media_library_id) }}"
                                                         alt="{{ $slider->title }}"
