@@ -1,0 +1,64 @@
+{
+  "_utils-D_e55-zw.js": {
+    "file": "assets/utils-D_e55-zw.js",
+    "name": "utils"
+  },
+  "node_modules/animejs/dist/modules/index.js": {
+    "file": "assets/index-BnRRaOsy.js",
+    "name": "index",
+    "src": "node_modules/animejs/dist/modules/index.js",
+    "isDynamicEntry": true
+  },
+  "node_modules/chart.js/auto/auto.js": {
+    "file": "assets/auto-CPGI3frw.js",
+    "name": "auto",
+    "src": "node_modules/chart.js/auto/auto.js",
+    "isDynamicEntry": true
+  },
+  "node_modules/gsap/index.js": {
+    "file": "assets/index-CgAXP8uT.js",
+    "name": "index",
+    "src": "node_modules/gsap/index.js",
+    "isDynamicEntry": true
+  },
+  "node_modules/swiper/modules/index.mjs": {
+    "file": "assets/index-KydTP0de.js",
+    "name": "index",
+    "src": "node_modules/swiper/modules/index.mjs",
+    "isDynamicEntry": true,
+    "imports": [
+      "_utils-D_e55-zw.js"
+    ]
+  },
+  "node_modules/swiper/swiper.mjs": {
+    "file": "assets/swiper-BCL8WDOs.js",
+    "name": "swiper",
+    "src": "node_modules/swiper/swiper.mjs",
+    "isDynamicEntry": true,
+    "imports": [
+      "_utils-D_e55-zw.js"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-f0Mz0X2r.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-TH8ANj4z.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/swiper/swiper.mjs",
+      "node_modules/swiper/modules/index.mjs",
+      "node_modules/gsap/index.js",
+      "node_modules/chart.js/auto/auto.js",
+      "node_modules/animejs/dist/modules/index.js"
+    ]
+  }
+}
