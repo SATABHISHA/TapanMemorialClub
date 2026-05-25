@@ -30,7 +30,7 @@ class AchievementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        Achievement::query()->create($request->validate([
+        $validated = $request->validate([
             'performance_id' => ['nullable', 'integer'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -38,10 +38,15 @@ class AchievementController extends Controller
             'year' => ['nullable', 'integer'],
             'badge_color' => ['nullable', 'string', 'max:20'],
             'icon' => ['nullable', 'string', 'max:120'],
-            'media_library_id' => ['nullable', 'integer'],
+            'media_library_id' => ['nullable', 'integer', 'exists:media_libraries,id'],
             'sort_order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
-        ]));
+        ]);
+
+        $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
+        $validated['is_featured'] = $request->boolean('is_featured');
+
+        Achievement::query()->create($validated);
 
         return back()->with('status', 'Achievement created.');
     }
@@ -67,7 +72,7 @@ class AchievementController extends Controller
      */
     public function update(Request $request, Achievement $achievement): RedirectResponse
     {
-        $achievement->update($request->validate([
+        $validated = $request->validate([
             'performance_id' => ['nullable', 'integer'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -75,10 +80,15 @@ class AchievementController extends Controller
             'year' => ['nullable', 'integer'],
             'badge_color' => ['nullable', 'string', 'max:20'],
             'icon' => ['nullable', 'string', 'max:120'],
-            'media_library_id' => ['nullable', 'integer'],
+            'media_library_id' => ['nullable', 'integer', 'exists:media_libraries,id'],
             'sort_order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
-        ]));
+        ]);
+
+        $validated['sort_order'] = (int) ($validated['sort_order'] ?? ($achievement->sort_order ?? 0));
+        $validated['is_featured'] = $request->boolean('is_featured');
+
+        $achievement->update($validated);
 
         return back()->with('status', 'Achievement updated.');
     }
