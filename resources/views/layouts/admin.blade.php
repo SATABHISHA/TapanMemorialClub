@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'TMC Admin' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body class="admin-body">
     <div class="admin-shell">
@@ -38,5 +39,6 @@
             @yield('content')
         </div>
     </div>
+    @stack('scripts')
 </body>
 </html>
