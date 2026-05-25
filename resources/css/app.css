@@ -889,9 +889,13 @@ html.reveal-init [data-section-reveal].is-visible {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: 1rem;
+	align-items: stretch;
 }
 .founder-card {
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 	overflow: hidden;
 	border-radius: 1.2rem;
 	background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -909,18 +913,21 @@ html.reveal-init [data-section-reveal].is-visible {
 }
 .founder-media-wrap {
 	position: relative;
-	aspect-ratio: 4 / 3;
+	height: clamp(280px, 36vw, 420px);
 	background: linear-gradient(145deg, rgba(8,21,46,.8), rgba(22,34,58,.78));
-	padding: .45rem;
+	padding: .55rem;
 	display: grid;
 	place-items: center;
+	border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .founder-media-wrap img {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
 	object-position: center center;
+	background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.09), rgba(8,21,46,.72));
 	border-radius: .85rem;
+	border: 1px solid rgba(255,255,255,.08);
 	transition: transform .7s ease;
 }
 .founder-card:hover .founder-media-wrap img { transform: scale(1.02); }
@@ -953,6 +960,18 @@ html.reveal-init [data-section-reveal].is-visible {
 	font-size: .9rem;
 	line-height: 1.6;
 	color: rgba(255,255,255,.72);
+}
+
+@media (max-width: 991.98px) {
+	.founder-media-wrap {
+		height: clamp(260px, 52vw, 360px);
+	}
+}
+
+@media (max-width: 575.98px) {
+	.founder-media-wrap {
+		height: 300px;
+	}
 }
 .founder-shine {
 	position: absolute;
