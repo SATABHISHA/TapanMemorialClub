@@ -913,28 +913,42 @@ html.reveal-init [data-section-reveal].is-visible {
 }
 .founder-media-wrap {
 	position: relative;
-	height: clamp(280px, 36vw, 420px);
-	background: linear-gradient(145deg, rgba(8,21,46,.8), rgba(22,34,58,.78));
-	padding: .55rem;
-	display: grid;
-	place-items: center;
-	border-bottom: 1px solid rgba(255,255,255,.08);
+	height: 260px;
+	background:
+		radial-gradient(ellipse at 50% 0%, rgba(212,175,55,.12), transparent 65%),
+		linear-gradient(170deg, rgba(8,21,46,.88), rgba(6,14,36,.96));
+	padding: 1.4rem 1.8rem 2.6rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-bottom: 1px solid rgba(212,175,55,.14);
 	overflow: hidden;
 }
-.founder-media-wrap img {
-	width: auto;
-	height: auto;
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: contain;
-	object-position: center center;
-	display: block;
-	background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.09), rgba(8,21,46,.72));
-	border-radius: .85rem;
-	border: 1px solid rgba(255,255,255,.08);
-	transition: transform .45s ease;
+.founder-img-frame {
+	width: 148px;
+	height: 148px;
+	border-radius: 50%;
+	overflow: hidden;
+	position: relative;
+	border: 3px solid rgba(212,175,55,.45);
+	box-shadow: 0 0 0 6px rgba(212,175,55,.10), 0 14px 36px rgba(0,0,0,.55);
+	background: linear-gradient(145deg, rgba(8,21,46,.9), rgba(22,34,58,.9));
+	flex-shrink: 0;
+	transition: border-color .45s ease, box-shadow .45s ease;
 }
-.founder-card:hover .founder-media-wrap img { transform: scale(1.01); }
+.founder-card:hover .founder-img-frame {
+	border-color: var(--gold);
+	box-shadow: 0 0 0 8px rgba(212,175,55,.18), 0 18px 46px rgba(0,0,0,.6), 0 0 32px rgba(212,175,55,.28);
+}
+.founder-img-frame img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center top;
+	display: block;
+	transition: transform .55s ease;
+}
+.founder-card:hover .founder-img-frame img { transform: scale(1.06); }
 .founder-badge {
 	position: absolute;
 	left: .85rem;
@@ -966,16 +980,13 @@ html.reveal-init [data-section-reveal].is-visible {
 	color: rgba(255,255,255,.72);
 }
 
-@media (max-width: 991.98px) {
-	.founder-media-wrap {
-		height: clamp(260px, 52vw, 360px);
-	}
+@media (max-width: 767px) {
+	.founder-img-frame { width: 128px; height: 128px; }
+	.founder-media-wrap { height: 220px; padding: 1.1rem 1.4rem 2.2rem; }
 }
-
 @media (max-width: 575.98px) {
-	.founder-media-wrap {
-		height: 300px;
-	}
+	.founder-img-frame { width: 112px; height: 112px; }
+	.founder-media-wrap { height: 200px; }
 }
 .founder-shine {
 	position: absolute;

@@ -325,7 +325,9 @@
                 @foreach($founders as $founder)
                     <article class="founder-card" data-aos="zoom-in-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}">
                         <div class="founder-media-wrap">
-                            <img src="{{ route('media.show', $founder->media_library_id) }}" alt="{{ $founder->title }}" loading="lazy" decoding="async">
+                            <div class="founder-img-frame">
+                                <img src="{{ route('media.show', $founder->media_library_id) }}" alt="{{ $founder->title }}" loading="lazy" decoding="async">
+                            </div>
                             <span class="founder-badge"><i class="bi bi-award-fill"></i> Founder</span>
                         </div>
                         <div class="founder-body">
