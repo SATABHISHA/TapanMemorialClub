@@ -54,7 +54,7 @@
                                 alt="{{ $item->title }}"
                                 class="rounded"
                                 style="width:64px;height:46px;object-fit:cover;cursor:pointer;"
-                                onclick="previewAchievement('{{ route('media.show', $item->media_library_id) }}', '{{ addslashes($item->title) }}')"
+                                onclick="previewAchievement(@js(route('media.show', $item->media_library_id)), @js($item->title))"
                             >
                         @else
                             <div class="rounded bg-secondary d-flex align-items-center justify-content-center" style="width:64px;height:46px;">
@@ -72,7 +72,7 @@
                                 <button
                                     class="btn btn-sm btn-outline-info"
                                     title="Preview"
-                                    onclick="previewAchievement('{{ route('media.show', $item->media_library_id) }}', '{{ addslashes($item->title) }}')"
+                                    onclick="previewAchievement(@js(route('media.show', $item->media_library_id)), @js($item->title))"
                                 >
                                     <i class="bi bi-eye"></i>
                                 </button>
@@ -81,17 +81,17 @@
                             <button
                                 class="btn btn-sm btn-outline-warning"
                                 title="Edit"
-                                onclick='openAchievementEdit(@json([
-                                    "id" => $item->id,
-                                    "title" => $item->title,
-                                    "description" => $item->description,
-                                    "year" => $item->year,
-                                    "badge_color" => $item->badge_color,
-                                    "media_library_id" => $item->media_library_id,
-                                    "sort_order" => $item->sort_order,
-                                    "is_featured" => (bool) $item->is_featured,
-                                    "thumb_url" => $item->media_library_id ? route("media.thumb", $item->media_library_id) : null,
-                                ]))'
+                                onclick="openAchievementEdit(
+                                    {{ $item->id }},
+                                    @js($item->title),
+                                    @js($item->description),
+                                    {{ $item->year ?? 'null' }},
+                                    @js($item->badge_color ?? '#D4AF37'),
+                                    {{ $item->media_library_id ?? 'null' }},
+                                    {{ $item->sort_order ?? 0 }},
+                                    {{ $item->is_featured ? 'true' : 'false' }},
+                                    @js($item->media_library_id ? route('media.thumb', $item->media_library_id) : null)
+                                )"
                             >
                                 <i class="bi bi-pencil"></i>
                             </button>
@@ -195,20 +195,20 @@ function previewAchievement(url, title) {
     new bootstrap.Modal(document.getElementById('achievementPreviewModal')).show();
 }
 
-function openAchievementEdit(payload) {
-    document.getElementById('achievementEditForm').action = '/admin/achievements/' + payload.id;
-    document.getElementById('editAchievementTitle').value = payload.title || '';
-    document.getElementById('editAchievementDescription').value = payload.description || '';
-    document.getElementById('editAchievementYear').value = Number.isFinite(payload.year) ? payload.year : '';
-    document.getElementById('editAchievementBadgeColor').value = payload.badge_color || '#D4AF37';
-    document.getElementById('editAchievementMediaId').value = Number.isFinite(payload.media_library_id) ? payload.media_library_id : '';
-    document.getElementById('editAchievementSortOrder').value = Number.isFinite(payload.sort_order) ? payload.sort_order : 0;
-    document.getElementById('editAchievementFeatured').checked = !!payload.is_featured;
+function openAchievementEdit(id, title, description, year, badgeColor, mediaId, sortOrder, isFeatured, thumbUrl) {
+    document.getElementById('achievementEditForm').action = '/admin/achievements/' + id;
+    document.getElementById('editAchievementTitle').value = title || '';
+    document.getElementById('editAchievementDescription').value = description || '';
+    document.getElementById('editAchievementYear').value = Number.isFinite(year) ? year : '';
+    document.getElementById('editAchievementBadgeColor').value = badgeColor || '#D4AF37';
+    document.getElementById('editAchievementMediaId').value = Number.isFinite(mediaId) ? mediaId : '';
+    document.getElementById('editAchievementSortOrder').value = Number.isFinite(sortOrder) ? sortOrder : 0;
+    document.getElementById('editAchievementFeatured').checked = !!isFeatured;
 
     const wrap = document.getElementById('achievementCurrentImgWrap');
     const image = document.getElementById('achievementCurrentImg');
-    if (payload.thumb_url) {
-        image.src = payload.thumb_url;
+    if (thumbUrl) {
+        image.src = thumbUrl;
         wrap.style.display = 'block';
     } else {
         image.src = '';
