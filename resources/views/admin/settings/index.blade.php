@@ -6,6 +6,9 @@
     $mail = $grouped->get('mail', collect())->keyBy('key');
     $valueOf = fn (string $key, string $default = ''): string => (string) (optional($all->get($key))->value ?? $default);
 
+    $developerLogoVisible = $valueOf('developer_logo_visible', '1') !== '0';
+    $clubLogoVisible = $valueOf('club_logo_visible', '1') !== '0';
+
     $contactFields = [
         'contact_address' => ['label' => 'Address', 'type' => 'textarea', 'placeholder' => 'Kolkata, West Bengal, India'],
         'contact_phone' => ['label' => 'Phone', 'type' => 'text', 'placeholder' => '+91-9000000000'],
@@ -173,6 +176,126 @@
     </form>
 </div>
 
+{{-- ===================== BRANDING / LOGO SETTINGS ===================== --}}
+<div class="glass-card p-4 mb-4">
+    <h4 class="mb-1 text-warning"><i class="bi bi-image me-2"></i>Branding &amp; Logo Settings</h4>
+    <p class="text-light-emphasis small mb-4">Control logos and developer credit displayed on the website. Toggle visibility or change the image URL at any time.</p>
+
+    <div class="row g-4">
+        {{-- ---- TMC Club Logo ---- --}}
+        <div class="col-lg-6">
+            <div class="border border-secondary rounded-3 p-3 h-100">
+                <h6 class="text-info mb-3"><i class="bi bi-shield-fill me-1"></i>Club Logo (Tapan Memorial Club)</h6>
+                <form method="POST" action="{{ route('admin.settings.bulk-update') }}" class="row g-3">
+                    @csrf
+                    <input type="hidden" name="boolean_keys[]" value="club_logo_visible">
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Logo Image URL</label>
+                        <input type="url" name="settings[club_logo_url]" class="form-control" id="club-logo-url-input"
+                               value="{{ $valueOf('club_logo_url') }}"
+                               placeholder="Leave empty to use default logo.jpeg">
+                        <div class="form-text text-light-emphasis">Paste a public image URL or leave blank to use the default club logo.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Preview</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <img id="club-logo-preview"
+                                 src="{{ $valueOf('club_logo_url') ?: asset('assets/images/logo.jpeg') }}"
+                                 alt="Club Logo Preview"
+                                 style="height:64px;width:auto;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;">
+                            <span class="text-light-emphasis small">Live preview</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   name="settings[club_logo_visible]" value="1"
+                                   id="club-logo-visible" @checked($clubLogoVisible)>
+                            <label class="form-check-label text-light-emphasis" for="club-logo-visible">
+                                Show club logo on website
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-gold btn-sm">Save Club Logo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- ---- Developer / Company Logo ---- --}}
+        <div class="col-lg-6">
+            <div class="border border-secondary rounded-3 p-3 h-100">
+                <h6 class="text-info mb-3"><i class="bi bi-building me-1"></i>Developer / Company Logo (Footer Credit)</h6>
+                <form method="POST" action="{{ route('admin.settings.bulk-update') }}" class="row g-3">
+                    @csrf
+                    <input type="hidden" name="boolean_keys[]" value="developer_logo_visible">
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Company Name</label>
+                        <input type="text" name="settings[developer_brand_name]" class="form-control"
+                               value="{{ $valueOf('developer_brand_name', 'AhaNova AI Technologies Pvt. Ltd.') }}"
+                               placeholder="AhaNova AI Technologies Pvt. Ltd.">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Company Website URL</label>
+                        <input type="url" name="settings[developer_website_url]" class="form-control"
+                               value="{{ $valueOf('developer_website_url') }}"
+                               placeholder="https://ahanova.in">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Logo Image URL</label>
+                        <input type="url" name="settings[developer_logo_url]" class="form-control" id="dev-logo-url-input"
+                               value="{{ $valueOf('developer_logo_url') }}"
+                               placeholder="Leave empty to auto-detect ahanova-logo.png from public/assets/images/">
+                        <div class="form-text text-light-emphasis">Leave empty to use the <code>ahanova-logo.png</code> file placed in <code>public/assets/images/</code>.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Preview</label>
+                        @php
+                            $devPreviewSrc = $valueOf('developer_logo_url');
+                            if (!$devPreviewSrc) {
+                                foreach (['ahanova-logo.png','ahanova-logo.jpg','ahanova-logo.jpeg','ahanova-logo.webp'] as $c) {
+                                    if (file_exists(public_path('assets/images/'.$c))) {
+                                        $devPreviewSrc = asset('assets/images/'.$c);
+                                        break;
+                                    }
+                                }
+                            }
+                        @endphp
+                        <div class="d-flex align-items-center gap-3">
+                            @if($devPreviewSrc)
+                                <img id="dev-logo-preview"
+                                     src="{{ $devPreviewSrc }}"
+                                     alt="Developer Logo Preview"
+                                     style="height:64px;width:auto;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;">
+                            @else
+                                <div id="dev-logo-preview" class="d-flex align-items-center justify-content-center rounded-2"
+                                     style="height:64px;min-width:120px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);font-size:.75rem;">
+                                    No logo file found
+                                </div>
+                            @endif
+                            <span class="text-light-emphasis small">Live preview (paste URL above to refresh)</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   name="settings[developer_logo_visible]" value="1"
+                                   id="dev-logo-visible" @checked($developerLogoVisible)>
+                            <label class="form-check-label text-light-emphasis" for="dev-logo-visible">
+                                Show company logo in footer
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-gold btn-sm">Save Company Logo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="glass-card p-4 mb-4">
     <h5 class="mb-3">Add a Custom Setting</h5>
     <form method="POST" action="{{ route('admin.settings.store') }}" class="row g-3">
@@ -186,7 +309,7 @@
 </div>
 
 @foreach($grouped as $groupName => $items)
-    @continue(in_array($groupName, ['mail', 'contact', 'social'], true))
+    @continue(in_array($groupName, ['mail', 'contact', 'social', 'branding'], true))
     <div class="glass-card p-4 mb-4">
         <h5 class="mb-3 text-info">{{ ucfirst($groupName ?: 'general') }} Settings</h5>
         <table class="table table-dark table-hover align-middle">
@@ -271,6 +394,26 @@
                 },
                 { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
             );
+        });
+    })();
+
+    // Live logo URL preview
+    (() => {
+        const pairs = [
+            ['club-logo-url-input', 'club-logo-preview'],
+            ['dev-logo-url-input', 'dev-logo-preview'],
+        ];
+        pairs.forEach(([inputId, previewId]) => {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            if (!input || !preview) return;
+            input.addEventListener('input', () => {
+                const url = input.value.trim();
+                if (url) {
+                    preview.src = url;
+                    preview.style.display = '';
+                }
+            });
         });
     })();
 </script>

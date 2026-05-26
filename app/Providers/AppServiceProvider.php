@@ -76,6 +76,9 @@ class AppServiceProvider extends ServiceProvider
                             'developer_brand_name' => (string) ($rows->get('developer_brand_name') ?: $shared['siteConfig']['developer_brand_name']),
                             'developer_logo_url' => (string) ($rows->get('developer_logo_url') ?: ''),
                             'developer_website_url' => (string) ($rows->get('developer_website_url') ?: ''),
+                            'developer_logo_visible' => (string) ($rows->get('developer_logo_visible') ?? '1'),
+                            'club_logo_url' => (string) ($rows->get('club_logo_url') ?: ''),
+                            'club_logo_visible' => (string) ($rows->get('club_logo_visible') ?? '1'),
                         ]);
                     }
                 } catch (Throwable) {
@@ -111,6 +114,9 @@ class AppServiceProvider extends ServiceProvider
             'developer_brand_name' => 'AhaNova AI Technologies Pvt. Ltd.',
             'developer_logo_url' => '',
             'developer_website_url' => '',
+            'developer_logo_visible' => '1',
+            'club_logo_url' => '',
+            'club_logo_visible' => '1',
         ];
     }
 

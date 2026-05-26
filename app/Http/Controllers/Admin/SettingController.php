@@ -15,6 +15,8 @@ class SettingController extends Controller
         'mail_' => 'mail',
         'contact_' => 'contact',
         'social_' => 'social',
+        'developer_' => 'branding',
+        'club_' => 'branding',
     ];
 
     public function index(): View
@@ -102,6 +104,14 @@ class SettingController extends Controller
 
         $payload = $request->input('settings', []);
 
+        // Merge in boolean sentinel keys so unchecked checkboxes persist as '0'
+        $booleanKeys = $request->input('boolean_keys', []);
+        foreach ($booleanKeys as $bk) {
+            if (! array_key_exists($bk, $payload)) {
+                $payload[$bk] = '0';
+            }
+        }
+
         foreach ($payload as $key => $value) {
             $value = is_null($value) ? '' : trim((string) $value);
 
@@ -149,6 +159,7 @@ class SettingController extends Controller
             str_contains($key, 'latitude') || str_contains($key, 'longitude') => 'number',
             str_contains($key, '_url') || str_contains($key, '_map') => 'url',
             str_contains($key, 'address') => 'textarea',
+            str_contains($key, '_visible') => 'boolean',
             default => 'text',
         };
     }

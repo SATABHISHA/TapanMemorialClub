@@ -3055,29 +3055,19 @@ html.reveal-init [data-section-reveal].is-visible {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: .45rem .55rem;
-	border-radius: 1rem;
-	border: 1px solid rgba(77,183,255,.28);
-	background: linear-gradient(140deg, rgba(6,16,38,.94), rgba(18,10,44,.9));
-	box-shadow: 0 10px 24px rgba(0,0,0,.3), inset 0 0 28px rgba(60,140,255,.09);
 	text-decoration: none;
-	transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+	transition: transform .25s ease, opacity .25s ease;
 }
 .tmc-brand-signature:hover {
 	transform: translateY(-2px);
-	border-color: rgba(215,91,255,.46);
-	box-shadow: 0 14px 30px rgba(0,0,0,.35), inset 0 0 34px rgba(215,91,255,.14);
+	opacity: .85;
 }
 .tmc-brand-signature__logo {
-	height: clamp(2.2rem, 4vw, 2.9rem);
+	height: clamp(2.8rem, 5vw, 3.6rem);
 	width: auto;
-	max-width: min(320px, 52vw);
+	max-width: min(220px, 48vw);
 	object-fit: contain;
 	display: block;
-	border-radius: .65rem;
-	background: rgba(0,0,0,.26);
-	padding: .16rem .22rem;
-	border: 1px solid rgba(255,255,255,.07);
 }
 
 @media (max-width: 767px) {
@@ -3086,8 +3076,8 @@ html.reveal-init [data-section-reveal].is-visible {
 		justify-content: center;
 	}
 	.tmc-brand-signature__logo {
-		height: 2rem;
-		max-width: 72vw;
+		height: 2.4rem;
+		max-width: 64vw;
 	}
 }
 

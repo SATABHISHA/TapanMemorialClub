@@ -29,7 +29,8 @@
         $developerBrandName = trim((string) ($siteConfig['developer_brand_name'] ?? 'AhaNova AI Technologies Pvt. Ltd.'));
         $developerLogoUrl = trim((string) ($siteConfig['developer_logo_url'] ?? ''));
         $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
-        if ($developerLogoUrl === '') {
+        $developerLogoVisible = ($siteConfig['developer_logo_visible'] ?? '1') !== '0';
+        if ($developerLogoVisible && $developerLogoUrl === '') {
             $logoCandidates = [
                 'assets/images/ahanova-logo.png',
                 'assets/images/ahanova-logo.jpg',
@@ -43,13 +44,20 @@
                 }
             }
         }
+        $clubLogoVisible = ($siteConfig['club_logo_visible'] ?? '1') !== '0';
+        $clubLogoUrl = trim((string) ($siteConfig['club_logo_url'] ?? ''));
+        if ($clubLogoUrl === '') {
+            $clubLogoUrl = asset('assets/images/logo.jpeg');
+        }
         $pageMenus = $globalMenus->filter(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
         $siteMenus = $globalMenus->reject(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
     @endphp
 
     <div id="preloader" class="tmc-preloader">
         <div class="preloader-ring">
-            <img src="{{ asset('assets/images/logo.jpeg') }}" alt="Tapan Memorial Club" class="tmc-preloader-logo">
+            @if($clubLogoVisible)
+                <img src="{{ $clubLogoUrl }}" alt="Tapan Memorial Club" class="tmc-preloader-logo">
+            @endif
         </div>
         <p class="preloader-text">Loading Franchise Experience<span class="dots"></span></p>
     </div>
@@ -83,7 +91,9 @@
     <nav class="navbar navbar-expand sticky-top tmc-navbar tmc-navbar--compact">
         <div class="container py-2 d-flex align-items-center flex-nowrap gap-2">
             <a class="navbar-brand brand-lockup flex-shrink-0" href="{{ route('home') }}">
-                <img src="{{ asset('assets/images/logo.jpeg') }}" alt="TMC" class="brand-logo">
+                @if($clubLogoVisible)
+                    <img src="{{ $clubLogoUrl }}" alt="TMC" class="brand-logo">
+                @endif
                 <div class="brand-lockup__text">
                     <span class="brand-text">Tapan Memorial Club</span>
                     <small class="brand-sub d-none d-sm-block">Legacy · League · Champions</small>
@@ -139,7 +149,9 @@
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="footer-brand mb-3">
-                        <img src="{{ asset('assets/images/logo.jpeg') }}" class="footer-logo" alt="Logo">
+                        @if($clubLogoVisible)
+                            <img src="{{ $clubLogoUrl }}" class="footer-logo" alt="Logo">
+                        @endif
                         <div class="footer-brand__text">
                             <h4 class="gradient-text mb-0">Tapan Memorial Club</h4>
                             <span class="footer-brand__sub">Legacy · League · Champions</span>
@@ -184,7 +196,7 @@
             <div class="d-flex flex-wrap justify-content-between gap-2 small text-light-emphasis">
                 <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
                 <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
-                @if($developerLogoUrl !== '')
+                @if($developerLogoVisible && $developerLogoUrl !== '')
                     <a
                         href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
                         class="tmc-brand-signature tmc-brand-signature--logo-only"
