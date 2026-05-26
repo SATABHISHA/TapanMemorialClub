@@ -98,8 +98,10 @@ class SettingController extends Controller
     public function bulkUpdate(Request $request): RedirectResponse
     {
         $request->validate([
-            'settings.contact_latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'settings.contact_latitude'  => ['nullable', 'numeric', 'between:-90,90'],
             'settings.contact_longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'club_logo_file'             => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
+            'developer_logo_file'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
         ]);
 
         $payload = $request->input('settings', []);
@@ -112,15 +114,31 @@ class SettingController extends Controller
             }
         }
 
+        // Handle logo image file uploads
+        $logoUploads = [
+            'club_logo_file'      => ['key' => 'club_logo_url',      'name' => 'club-logo'],
+            'developer_logo_file' => ['key' => 'developer_logo_url', 'name' => 'ahanova-logo'],
+        ];
+
+        foreach ($logoUploads as $inputName => $config) {
+            if ($request->hasFile($inputName) && $request->file($inputName)->isValid()) {
+                $file     = $request->file($inputName);
+                $ext      = strtolower($file->getClientOriginalExtension());
+                $filename = $config['name'] . '.' . $ext;
+                $file->move(public_path('assets/images'), $filename);
+                $payload[$config['key']] = asset('assets/images/' . $filename);
+            }
+        }
+
         foreach ($payload as $key => $value) {
             $value = is_null($value) ? '' : trim((string) $value);
 
             Setting::query()->updateOrCreate(
                 ['key' => $key],
                 [
-                    'group' => $this->resolveGroup($key),
-                    'value' => $value,
-                    'type' => $this->resolveType($key),
+                    'group'     => $this->resolveGroup($key),
+                    'value'     => $value,
+                    'type'      => $this->resolveType($key),
                     'is_public' => ! Str::startsWith($key, 'mail_'),
                 ]
             );

@@ -186,26 +186,44 @@
         <div class="col-lg-6">
             <div class="border border-secondary rounded-3 p-3 h-100">
                 <h6 class="text-info mb-3"><i class="bi bi-shield-fill me-1"></i>Club Logo (Tapan Memorial Club)</h6>
-                <form method="POST" action="{{ route('admin.settings.bulk-update') }}" class="row g-3">
+                <form method="POST" action="{{ route('admin.settings.bulk-update') }}"
+                      enctype="multipart/form-data" class="row g-3" id="form-club-logo">
                     @csrf
                     <input type="hidden" name="boolean_keys[]" value="club_logo_visible">
+
+                    {{-- File Upload --}}
                     <div class="col-12">
-                        <label class="form-label small text-uppercase text-warning">Logo Image URL</label>
-                        <input type="url" name="settings[club_logo_url]" class="form-control" id="club-logo-url-input"
-                               value="{{ $valueOf('club_logo_url') }}"
-                               placeholder="Leave empty to use default logo.jpeg">
-                        <div class="form-text text-light-emphasis">Paste a public image URL or leave blank to use the default club logo.</div>
+                        <label class="form-label small text-uppercase text-warning">Upload Image</label>
+                        <label for="club-logo-file" class="tmc-upload-drop w-100" id="club-logo-drop">
+                            <i class="bi bi-cloud-upload fs-3 text-info"></i>
+                            <span class="d-block mt-1 fw-semibold">Click or drag &amp; drop to upload</span>
+                            <span class="d-block text-light-emphasis small mt-1" id="club-logo-file-name">PNG, JPG, WEBP &mdash; max 2 MB</span>
+                        </label>
+                        <input type="file" id="club-logo-file" name="club_logo_file"
+                               accept="image/png,image/jpeg,image/webp,image/gif"
+                               class="d-none" data-preview="club-logo-preview" data-name="club-logo-file-name">
                     </div>
+
+                    {{-- Preview --}}
                     <div class="col-12">
                         <label class="form-label small text-uppercase text-warning">Preview</label>
                         <div class="d-flex align-items-center gap-3">
                             <img id="club-logo-preview"
                                  src="{{ $valueOf('club_logo_url') ?: asset('assets/images/logo.jpeg') }}"
                                  alt="Club Logo Preview"
-                                 style="height:64px;width:auto;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;">
-                            <span class="text-light-emphasis small">Live preview</span>
+                                 style="height:72px;width:auto;max-width:180px;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;">
                         </div>
                     </div>
+
+                    {{-- URL fallback --}}
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Or paste image URL</label>
+                        <input type="url" name="settings[club_logo_url]" class="form-control" id="club-logo-url-input"
+                               value="{{ $valueOf('club_logo_url') }}"
+                               placeholder="https://... (leave empty to use uploaded file)">
+                        <div class="form-text text-light-emphasis">Uploading a file above will override this URL.</div>
+                    </div>
+
                     <div class="col-12">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch"
@@ -227,9 +245,11 @@
         <div class="col-lg-6">
             <div class="border border-secondary rounded-3 p-3 h-100">
                 <h6 class="text-info mb-3"><i class="bi bi-building me-1"></i>Developer / Company Logo (Footer Credit)</h6>
-                <form method="POST" action="{{ route('admin.settings.bulk-update') }}" class="row g-3">
+                <form method="POST" action="{{ route('admin.settings.bulk-update') }}"
+                      enctype="multipart/form-data" class="row g-3" id="form-dev-logo">
                     @csrf
                     <input type="hidden" name="boolean_keys[]" value="developer_logo_visible">
+
                     <div class="col-12">
                         <label class="form-label small text-uppercase text-warning">Company Name</label>
                         <input type="text" name="settings[developer_brand_name]" class="form-control"
@@ -242,13 +262,21 @@
                                value="{{ $valueOf('developer_website_url') }}"
                                placeholder="https://ahanova.in">
                     </div>
+
+                    {{-- File Upload --}}
                     <div class="col-12">
-                        <label class="form-label small text-uppercase text-warning">Logo Image URL</label>
-                        <input type="url" name="settings[developer_logo_url]" class="form-control" id="dev-logo-url-input"
-                               value="{{ $valueOf('developer_logo_url') }}"
-                               placeholder="Leave empty to auto-detect ahanova-logo.png from public/assets/images/">
-                        <div class="form-text text-light-emphasis">Leave empty to use the <code>ahanova-logo.png</code> file placed in <code>public/assets/images/</code>.</div>
+                        <label class="form-label small text-uppercase text-warning">Upload Logo Image</label>
+                        <label for="dev-logo-file" class="tmc-upload-drop w-100" id="dev-logo-drop">
+                            <i class="bi bi-cloud-upload fs-3 text-info"></i>
+                            <span class="d-block mt-1 fw-semibold">Click or drag &amp; drop to upload</span>
+                            <span class="d-block text-light-emphasis small mt-1" id="dev-logo-file-name">PNG, JPG, WEBP &mdash; max 2 MB</span>
+                        </label>
+                        <input type="file" id="dev-logo-file" name="developer_logo_file"
+                               accept="image/png,image/jpeg,image/webp,image/gif"
+                               class="d-none" data-preview="dev-logo-preview" data-name="dev-logo-file-name">
                     </div>
+
+                    {{-- Preview --}}
                     <div class="col-12">
                         <label class="form-label small text-uppercase text-warning">Preview</label>
                         @php
@@ -263,20 +291,25 @@
                             }
                         @endphp
                         <div class="d-flex align-items-center gap-3">
-                            @if($devPreviewSrc)
-                                <img id="dev-logo-preview"
-                                     src="{{ $devPreviewSrc }}"
-                                     alt="Developer Logo Preview"
-                                     style="height:64px;width:auto;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;">
-                            @else
-                                <div id="dev-logo-preview" class="d-flex align-items-center justify-content-center rounded-2"
-                                     style="height:64px;min-width:120px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);font-size:.75rem;">
-                                    No logo file found
-                                </div>
+                            <img id="dev-logo-preview"
+                                 src="{{ $devPreviewSrc ?: '' }}"
+                                 alt="Developer Logo Preview"
+                                 style="height:72px;width:auto;max-width:220px;object-fit:contain;border-radius:6px;background:rgba(255,255,255,.05);padding:4px;{{ !$devPreviewSrc ? 'display:none;' : '' }}">
+                            @if(!$devPreviewSrc)
+                                <span class="text-light-emphasis small">No logo yet &mdash; upload one above.</span>
                             @endif
-                            <span class="text-light-emphasis small">Live preview (paste URL above to refresh)</span>
                         </div>
                     </div>
+
+                    {{-- URL fallback --}}
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Or paste image URL</label>
+                        <input type="url" name="settings[developer_logo_url]" class="form-control" id="dev-logo-url-input"
+                               value="{{ $valueOf('developer_logo_url') }}"
+                               placeholder="https://... (leave empty to use uploaded file)">
+                        <div class="form-text text-light-emphasis">Uploading a file above will override this URL. Leave both empty to auto-detect <code>ahanova-logo.png</code>.</div>
+                    </div>
+
                     <div class="col-12">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch"
@@ -397,22 +430,53 @@
         });
     })();
 
-    // Live logo URL preview
+    // Logo file upload + URL preview handlers
     (() => {
-        const pairs = [
+        // File picker → instant preview
+        document.querySelectorAll('input[type="file"][data-preview]').forEach(input => {
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                if (!file) return;
+                const preview = document.getElementById(input.dataset.preview);
+                const nameEl = document.getElementById(input.dataset.name);
+                if (nameEl) nameEl.textContent = file.name;
+                const drop = input.previousElementSibling;
+                if (drop) drop.classList.add('tmc-upload-drop--active');
+                if (preview) {
+                    const reader = new FileReader();
+                    reader.onload = e => { preview.src = e.target.result; preview.style.display = ''; };
+                    reader.readAsDataURL(file);
+                }
+            });
+            // Drag-and-drop on the label
+            const label = input.previousElementSibling;
+            if (label) {
+                label.addEventListener('dragover', e => { e.preventDefault(); label.classList.add('tmc-upload-drop--hover'); });
+                label.addEventListener('dragleave', () => label.classList.remove('tmc-upload-drop--hover'));
+                label.addEventListener('drop', e => {
+                    e.preventDefault();
+                    label.classList.remove('tmc-upload-drop--hover');
+                    const dt = e.dataTransfer;
+                    if (dt && dt.files.length) {
+                        input.files = dt.files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                });
+            }
+        });
+
+        // URL input → live preview
+        const urlPairs = [
             ['club-logo-url-input', 'club-logo-preview'],
             ['dev-logo-url-input', 'dev-logo-preview'],
         ];
-        pairs.forEach(([inputId, previewId]) => {
+        urlPairs.forEach(([inputId, previewId]) => {
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
             if (!input || !preview) return;
             input.addEventListener('input', () => {
                 const url = input.value.trim();
-                if (url) {
-                    preview.src = url;
-                    preview.style.display = '';
-                }
+                if (url) { preview.src = url; preview.style.display = ''; }
             });
         });
     })();

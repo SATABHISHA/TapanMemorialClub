@@ -3050,6 +3050,31 @@ html.reveal-init [data-section-reveal].is-visible {
 	color: var(--gold-bright);
 }
 
+/* ============ ADMIN UPLOAD DROP ZONE ============ */
+.tmc-upload-drop {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 1.2rem 1rem;
+	border: 2px dashed rgba(77,183,255,.35);
+	border-radius: .75rem;
+	background: rgba(77,183,255,.04);
+	cursor: pointer;
+	text-align: center;
+	transition: border-color .2s ease, background .2s ease;
+	user-select: none;
+}
+.tmc-upload-drop:hover,
+.tmc-upload-drop--hover {
+	border-color: rgba(77,183,255,.7);
+	background: rgba(77,183,255,.09);
+}
+.tmc-upload-drop--active {
+	border-color: rgba(34,197,94,.6);
+	background: rgba(34,197,94,.07);
+}
+
 /* ============ FOOTER BRAND SIGNATURE ============ */
 .tmc-brand-signature {
 	display: inline-flex;
