@@ -31,6 +31,7 @@
         $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
         $developerLogoVisible = ($siteConfig['developer_logo_visible'] ?? '1') !== '0';
         if ($developerLogoVisible && $developerLogoUrl === '') {
+            // Strip ?v=... from stored URL before file_exists check, then re-add for cache-busting
             $logoCandidates = [
                 'assets/images/ahanova-logo.png',
                 'assets/images/ahanova-logo.jpg',
@@ -39,7 +40,7 @@
             ];
             foreach ($logoCandidates as $candidate) {
                 if (file_exists(public_path($candidate))) {
-                    $developerLogoUrl = asset($candidate);
+                    $developerLogoUrl = asset($candidate) . '?v=' . filemtime(public_path($candidate));
                     break;
                 }
             }

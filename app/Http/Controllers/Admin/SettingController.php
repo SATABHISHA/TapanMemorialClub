@@ -126,7 +126,9 @@ class SettingController extends Controller
                 $ext      = strtolower($file->getClientOriginalExtension());
                 $filename = $config['name'] . '.' . $ext;
                 $file->move(public_path('assets/images'), $filename);
-                $payload[$config['key']] = asset('assets/images/' . $filename);
+                // Append a version timestamp so browsers always fetch the new file
+                // instead of serving a cached copy of the previous image.
+                $payload[$config['key']] = asset('assets/images/' . $filename) . '?v=' . time();
             }
         }
 

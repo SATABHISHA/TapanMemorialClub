@@ -280,11 +280,14 @@
                     <div class="col-12">
                         <label class="form-label small text-uppercase text-warning">Preview</label>
                         @php
-                            $devPreviewSrc = $valueOf('developer_logo_url');
+                            // Strip ?v=... query param to get the bare path for file_exists check
+                            $devStoredUrl = $valueOf('developer_logo_url');
+                            $devPreviewSrc = $devStoredUrl;
                             if (!$devPreviewSrc) {
                                 foreach (['ahanova-logo.png','ahanova-logo.jpg','ahanova-logo.jpeg','ahanova-logo.webp'] as $c) {
                                     if (file_exists(public_path('assets/images/'.$c))) {
-                                        $devPreviewSrc = asset('assets/images/'.$c);
+                                        // Add cache-buster based on file modification time
+                                        $devPreviewSrc = asset('assets/images/'.$c) . '?v=' . filemtime(public_path('assets/images/'.$c));
                                         break;
                                     }
                                 }
@@ -305,7 +308,7 @@
                     <div class="col-12">
                         <label class="form-label small text-uppercase text-warning">Or paste image URL</label>
                         <input type="url" name="settings[developer_logo_url]" class="form-control" id="dev-logo-url-input"
-                               value="{{ $valueOf('developer_logo_url') }}"
+                               value="{{ $devStoredUrl }}"
                                placeholder="https://... (leave empty to use uploaded file)">
                         <div class="form-text text-light-emphasis">Uploading a file above will override this URL. Leave both empty to auto-detect <code>ahanova-logo.png</code>.</div>
                     </div>
@@ -432,16 +435,25 @@
 
     // Logo file upload + URL preview handlers
     (() => {
-        // File picker → instant preview
+        // Map: file input id → url input id
+        const urlInputMap = {
+            'club-logo-file': 'club-logo-url-input',
+            'dev-logo-file':  'dev-logo-url-input',
+        };
+
+        // File picker → instant preview + clear URL input
         document.querySelectorAll('input[type="file"][data-preview]').forEach(input => {
             input.addEventListener('change', () => {
                 const file = input.files[0];
                 if (!file) return;
                 const preview = document.getElementById(input.dataset.preview);
-                const nameEl = document.getElementById(input.dataset.name);
+                const nameEl  = document.getElementById(input.dataset.name);
                 if (nameEl) nameEl.textContent = file.name;
                 const drop = input.previousElementSibling;
                 if (drop) drop.classList.add('tmc-upload-drop--active');
+                // Clear the URL fallback input — file upload takes priority
+                const urlInput = document.getElementById(urlInputMap[input.id]);
+                if (urlInput) urlInput.value = '';
                 if (preview) {
                     const reader = new FileReader();
                     reader.onload = e => { preview.src = e.target.result; preview.style.display = ''; };
@@ -458,20 +470,23 @@
                     label.classList.remove('tmc-upload-drop--hover');
                     const dt = e.dataTransfer;
                     if (dt && dt.files.length) {
-                        input.files = dt.files;
+                        // Use DataTransfer to assign files to the input
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(dt.files[0]);
+                        input.files = dataTransfer.files;
                         input.dispatchEvent(new Event('change'));
                     }
                 });
             }
         });
 
-        // URL input → live preview
+        // URL input → live preview (only when no file is selected)
         const urlPairs = [
             ['club-logo-url-input', 'club-logo-preview'],
-            ['dev-logo-url-input', 'dev-logo-preview'],
+            ['dev-logo-url-input',  'dev-logo-preview'],
         ];
         urlPairs.forEach(([inputId, previewId]) => {
-            const input = document.getElementById(inputId);
+            const input   = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
             if (!input || !preview) return;
             input.addEventListener('input', () => {

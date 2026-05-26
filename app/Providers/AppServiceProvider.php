@@ -43,11 +43,12 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            static $shared = null;
-
-            if ($shared === null) {
+            // Use the request-scoped container instance instead of a static
+            // variable so that data is always fresh after a save (static closures
+            // persist their variables across requests inside the same PHP-FPM worker).
+            if (! app()->bound('_tmc_view_shared')) {
                 $shared = [
-                    'menus' => collect(),
+                    'menus'      => collect(),
                     'siteConfig' => $this->defaultSiteConfig(),
                 ];
 
@@ -61,30 +62,34 @@ class AppServiceProvider extends ServiceProvider
                     if (Schema::hasTable('settings')) {
                         $rows = Setting::query()->where('is_public', true)->pluck('value', 'key');
                         $shared['siteConfig'] = array_replace($shared['siteConfig'], [
-                            'contact_address' => (string) ($rows->get('contact_address') ?: $shared['siteConfig']['contact_address']),
-                            'contact_phone' => (string) ($rows->get('contact_phone') ?: $shared['siteConfig']['contact_phone']),
-                            'contact_email' => (string) ($rows->get('contact_email') ?: $shared['siteConfig']['contact_email']),
-                            'contact_latitude' => (string) ($rows->get('contact_latitude') ?: ''),
-                            'contact_longitude' => (string) ($rows->get('contact_longitude') ?: ''),
-                            'contact_map_embed_url' => (string) ($rows->get('contact_map_embed_url') ?: $shared['siteConfig']['contact_map_embed_url']),
-                            'contact_whatsapp_number' => (string) ($rows->get('contact_whatsapp_number') ?: $shared['siteConfig']['contact_whatsapp_number']),
-                            'social_instagram_url' => (string) ($rows->get('social_instagram_url') ?: ''),
-                            'social_facebook_url' => (string) ($rows->get('social_facebook_url') ?: ''),
-                            'social_youtube_url' => (string) ($rows->get('social_youtube_url') ?: ''),
-                            'social_twitter_url' => (string) ($rows->get('social_twitter_url') ?: ''),
-                            'social_linkedin_url' => (string) ($rows->get('social_linkedin_url') ?: ''),
-                            'developer_brand_name' => (string) ($rows->get('developer_brand_name') ?: $shared['siteConfig']['developer_brand_name']),
-                            'developer_logo_url' => (string) ($rows->get('developer_logo_url') ?: ''),
-                            'developer_website_url' => (string) ($rows->get('developer_website_url') ?: ''),
+                            'contact_address'        => (string) ($rows->get('contact_address') ?: $shared['siteConfig']['contact_address']),
+                            'contact_phone'          => (string) ($rows->get('contact_phone') ?: $shared['siteConfig']['contact_phone']),
+                            'contact_email'          => (string) ($rows->get('contact_email') ?: $shared['siteConfig']['contact_email']),
+                            'contact_latitude'       => (string) ($rows->get('contact_latitude') ?: ''),
+                            'contact_longitude'      => (string) ($rows->get('contact_longitude') ?: ''),
+                            'contact_map_embed_url'  => (string) ($rows->get('contact_map_embed_url') ?: $shared['siteConfig']['contact_map_embed_url']),
+                            'contact_whatsapp_number'=> (string) ($rows->get('contact_whatsapp_number') ?: $shared['siteConfig']['contact_whatsapp_number']),
+                            'social_instagram_url'   => (string) ($rows->get('social_instagram_url') ?: ''),
+                            'social_facebook_url'    => (string) ($rows->get('social_facebook_url') ?: ''),
+                            'social_youtube_url'     => (string) ($rows->get('social_youtube_url') ?: ''),
+                            'social_twitter_url'     => (string) ($rows->get('social_twitter_url') ?: ''),
+                            'social_linkedin_url'    => (string) ($rows->get('social_linkedin_url') ?: ''),
+                            'developer_brand_name'   => (string) ($rows->get('developer_brand_name') ?: $shared['siteConfig']['developer_brand_name']),
+                            'developer_logo_url'     => (string) ($rows->get('developer_logo_url') ?: ''),
+                            'developer_website_url'  => (string) ($rows->get('developer_website_url') ?: ''),
                             'developer_logo_visible' => (string) ($rows->get('developer_logo_visible') ?? '1'),
-                            'club_logo_url' => (string) ($rows->get('club_logo_url') ?: ''),
-                            'club_logo_visible' => (string) ($rows->get('club_logo_visible') ?? '1'),
+                            'club_logo_url'          => (string) ($rows->get('club_logo_url') ?: ''),
+                            'club_logo_visible'      => (string) ($rows->get('club_logo_visible') ?? '1'),
                         ]);
                     }
                 } catch (Throwable) {
                     $shared['siteConfig'] = $this->defaultSiteConfig();
                 }
+
+                app()->instance('_tmc_view_shared', $shared);
             }
+
+            $shared = app('_tmc_view_shared');
 
             try {
                 $view->with('globalMenus', $shared['menus']);
