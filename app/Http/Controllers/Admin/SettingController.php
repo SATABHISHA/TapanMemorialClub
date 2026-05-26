@@ -12,11 +12,12 @@ use Illuminate\Support\Str;
 class SettingController extends Controller
 {
     private const GROUP_PREFIX_MAP = [
-        'mail_' => 'mail',
-        'contact_' => 'contact',
-        'social_' => 'social',
-        'developer_' => 'branding',
-        'club_' => 'branding',
+        'mail_'       => 'mail',
+        'contact_'    => 'contact',
+        'social_'     => 'social',
+        'developer_'  => 'branding',
+        'club_logo_'  => 'branding',   // logo-related keys stay in branding
+        'club_'       => 'club',        // identity/content keys go to club
     ];
 
     public function index(): View
@@ -178,7 +179,7 @@ class SettingController extends Controller
             str_contains($key, 'email') => 'email',
             str_contains($key, 'latitude') || str_contains($key, 'longitude') => 'number',
             str_contains($key, '_url') || str_contains($key, '_map') => 'url',
-            str_contains($key, 'address') => 'textarea',
+            str_contains($key, 'address') || str_ends_with($key, '_text') => 'textarea',
             str_contains($key, '_visible') => 'boolean',
             default => 'text',
         };

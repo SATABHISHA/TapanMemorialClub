@@ -389,6 +389,72 @@
     </div>
 </div>
 
+{{-- ===================== CLUB IDENTITY SETTINGS ===================== --}}
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="glass-card p-4 h-100">
+            <h4 class="mb-1 text-warning"><i class="bi bi-shield-shaded me-2"></i>Club Identity Settings</h4>
+            <p class="text-light-emphasis small mb-3">Edit the club's name, founding year, history, and performance text shown on the website.</p>
+
+            <form method="POST" action="{{ route('admin.settings.bulk-update') }}" class="row g-3" id="form-club-identity">
+                @csrf
+                <div class="col-md-8">
+                    <label class="form-label small text-uppercase text-warning">Club Name</label>
+                    <input type="text" name="settings[club_name]" class="form-control"
+                           value="{{ $valueOf('club_name', 'Tapan Memorial Club') }}"
+                           placeholder="Tapan Memorial Club" id="preview-club-name">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-uppercase text-warning">Established Year</label>
+                    <input type="number" name="settings[club_estd]" class="form-control"
+                           value="{{ $valueOf('club_estd', '1942') }}"
+                           placeholder="1942" min="1800" max="{{ date('Y') }}" id="preview-club-estd">
+                </div>
+                <div class="col-12">
+                    <label class="form-label small text-uppercase text-warning">Brief History / Intro Text</label>
+                    <textarea name="settings[club_intro_text]" rows="7" class="form-control"
+                              placeholder="Brief history of the club..." id="preview-club-intro">{{ $valueOf('club_intro_text') }}</textarea>
+                    <div class="form-text text-light-emphasis">Displayed in the About / History section on the homepage.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label small text-uppercase text-warning">Performance Text</label>
+                    <textarea name="settings[club_performance_text]" rows="7" class="form-control"
+                              placeholder="Performance of past years..." id="preview-club-perf">{{ $valueOf('club_performance_text') }}</textarea>
+                    <div class="form-text text-light-emphasis">Displayed in the Performances section. Each line or paragraph represents a separate achievement.</div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-gold">Save Club Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h5 class="mb-3">Live Preview</h5>
+            <div class="p-3 rounded-3 mb-3" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <img src="{{ $valueOf('club_logo_url') ?: asset('assets/images/logo.jpeg') }}"
+                         alt="Club Logo" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                    <div>
+                        <div class="fw-bold text-warning" id="preview-name-display">{{ $valueOf('club_name', 'Tapan Memorial Club') }}</div>
+                        <div class="small text-light-emphasis">Est. <span id="preview-estd-display">{{ $valueOf('club_estd', '1942') }}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="small text-uppercase text-warning fw-semibold mb-1">Intro / History</div>
+                <div class="small text-light-emphasis" id="preview-intro-display"
+                     style="white-space:pre-wrap;max-height:160px;overflow-y:auto;">{{ $valueOf('club_intro_text') ?: '(empty)' }}</div>
+            </div>
+            <div>
+                <div class="small text-uppercase text-warning fw-semibold mb-1">Performance</div>
+                <div class="small text-light-emphasis" id="preview-perf-display"
+                     style="white-space:pre-wrap;max-height:160px;overflow-y:auto;">{{ $valueOf('club_performance_text') ?: '(empty)' }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="glass-card p-4 mb-4">
     <h5 class="mb-3">Add a Custom Setting</h5>
     <form method="POST" action="{{ route('admin.settings.store') }}" class="row g-3">
@@ -402,7 +468,7 @@
 </div>
 
 @foreach($grouped as $groupName => $items)
-    @continue(in_array($groupName, ['mail', 'contact', 'social', 'branding'], true))
+    @continue(in_array($groupName, ['mail', 'contact', 'social', 'branding', 'club'], true))
     <div class="glass-card p-4 mb-4">
         <h5 class="mb-3 text-info">{{ ucfirst($groupName ?: 'general') }} Settings</h5>
         <table class="table table-dark table-hover align-middle">
@@ -598,6 +664,22 @@
         }
         applyDevHeight(range.value);
         range.addEventListener('input', () => applyDevHeight(range.value));
+    })();
+
+    // Club identity live preview
+    (() => {
+        const link = (inputId, displayId, fallback) => {
+            const input   = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            if (!input || !display) return;
+            input.addEventListener('input', () => {
+                display.textContent = input.value.trim() || fallback;
+            });
+        };
+        link('preview-club-name',  'preview-name-display',  'Tapan Memorial Club');
+        link('preview-club-estd',  'preview-estd-display',  '1942');
+        link('preview-club-intro', 'preview-intro-display', '(empty)');
+        link('preview-club-perf',  'preview-perf-display',  '(empty)');
     })();
 </script>
 @endsection
