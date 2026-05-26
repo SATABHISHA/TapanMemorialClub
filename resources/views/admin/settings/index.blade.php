@@ -202,6 +202,19 @@
                         <input type="file" id="club-logo-file" name="club_logo_file"
                                accept="image/png,image/jpeg,image/webp,image/gif"
                                class="d-none" data-preview="club-logo-preview" data-name="club-logo-file-name">
+                        {{-- Size guidance --}}
+                        <div class="mt-2 p-2 rounded-2" style="background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);">
+                            <p class="mb-1 small text-info"><i class="bi bi-rulers me-1"></i><strong>Recommended size: 500 &times; 500 px (square)</strong></p>
+                            <p class="mb-0 text-light-emphasis" style="font-size:.78rem;">
+                                The club logo is displayed as a <strong>circle</strong> (cropped to center) in three places:
+                            </p>
+                            <ul class="mb-0 text-light-emphasis ps-3" style="font-size:.78rem;">
+                                <li>Navbar: 68 &times; 68 px circle</li>
+                                <li>Footer: 48 &times; 48 px circle</li>
+                                <li>Loading screen: 80 &times; 80 px circle</li>
+                            </ul>
+                            <p class="mb-0 mt-1 text-light-emphasis" style="font-size:.78rem;">Use a square image with the logo centered. PNG with a transparent or solid-color background works best.</p>
+                        </div>
                     </div>
 
                     {{-- Preview --}}
@@ -274,6 +287,18 @@
                         <input type="file" id="dev-logo-file" name="developer_logo_file"
                                accept="image/png,image/jpeg,image/webp,image/gif"
                                class="d-none" data-preview="dev-logo-preview" data-name="dev-logo-file-name">
+                        {{-- Size guidance --}}
+                        <div class="mt-2 p-2 rounded-2" style="background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);">
+                            <p class="mb-1 small text-info"><i class="bi bi-rulers me-1"></i><strong>Recommended size: 400 &times; 120 px (landscape)</strong></p>
+                            <p class="mb-0 text-light-emphasis" style="font-size:.78rem;">
+                                The company logo is displayed in the <strong>footer credit bar</strong>:
+                            </p>
+                            <ul class="mb-0 text-light-emphasis ps-3" style="font-size:.78rem;">
+                                <li>Desktop: up to 220 px wide, ~50 px tall</li>
+                                <li>Mobile: up to 64 vw wide, ~38 px tall</li>
+                            </ul>
+                            <p class="mb-0 mt-1 text-light-emphasis" style="font-size:.78rem;">Use a <strong>horizontal (wide) logo</strong> with a transparent background. PNG or WEBP format recommended.</p>
+                        </div>
                     </div>
 
                     {{-- Preview --}}

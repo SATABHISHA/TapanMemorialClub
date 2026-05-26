@@ -29,9 +29,23 @@
         $developerBrandName = trim((string) ($siteConfig['developer_brand_name'] ?? 'AhaNova AI Technologies Pvt. Ltd.'));
         $developerLogoUrl = trim((string) ($siteConfig['developer_logo_url'] ?? ''));
         $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
-        $developerLogoVisible = ($siteConfig['developer_logo_visible'] ?? '1') !== '0';
+
+        // Read visibility flags directly from DB to guarantee fresh values regardless of any
+        // server-side caching layer (OPcache, FPM static variables, etc.).
+        // This is a single cheap query on an indexed key — negligible overhead.
+        try {
+            $_visRows = \App\Models\Setting::query()
+                ->whereIn('key', ['developer_logo_visible', 'club_logo_visible'])
+                ->pluck('value', 'key');
+            $developerLogoVisible = ($_visRows->get('developer_logo_visible') ?? '1') !== '0';
+            $clubLogoVisible      = ($_visRows->get('club_logo_visible')      ?? '1') !== '0';
+        } catch (\Throwable) {
+            $developerLogoVisible = ($siteConfig['developer_logo_visible'] ?? '1') !== '0';
+            $clubLogoVisible      = ($siteConfig['club_logo_visible']      ?? '1') !== '0';
+        }
+
         if ($developerLogoVisible && $developerLogoUrl === '') {
-            // Strip ?v=... from stored URL before file_exists check, then re-add for cache-busting
+            // Auto-detect logo file and add mtime-based cache-buster
             $logoCandidates = [
                 'assets/images/ahanova-logo.png',
                 'assets/images/ahanova-logo.jpg',
@@ -45,7 +59,6 @@
                 }
             }
         }
-        $clubLogoVisible = ($siteConfig['club_logo_visible'] ?? '1') !== '0';
         $clubLogoUrl = trim((string) ($siteConfig['club_logo_url'] ?? ''));
         if ($clubLogoUrl === '') {
             $clubLogoUrl = asset('assets/images/logo.jpeg');
