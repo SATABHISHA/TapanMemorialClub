@@ -175,17 +175,16 @@
                 <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
                 <a
                     href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
-                    class="tmc-developer-credit"
+                    class="tmc-brand-signature"
                     @if($developerWebsiteUrl !== '') target="_blank" rel="noopener" @endif
-                    aria-label="Developed by {{ $developerBrandName }}"
+                    aria-label="{{ $developerBrandName }}"
                 >
                     @if($developerLogoUrl !== '')
-                        <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo" class="tmc-developer-credit__logo" loading="lazy" decoding="async">
+                        <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo" class="tmc-brand-signature__logo" loading="lazy" decoding="async">
+                    @else
+                        <span class="tmc-brand-signature__glyph" aria-hidden="true">A</span>
                     @endif
-                    <span class="tmc-developer-credit__meta">
-                        <span class="tmc-developer-credit__label">Developed by</span>
-                        <strong class="tmc-developer-credit__name">{{ $developerBrandName }}</strong>
-                    </span>
+                    <strong class="tmc-brand-signature__name">{{ $developerBrandName }}</strong>
                 </a>
             </div>
         </div>
