@@ -3080,6 +3080,17 @@ html.reveal-init [data-section-reveal].is-visible {
 	/* Tighter global section padding */
 	.section-pad { padding: 3rem 0 !important; }
 
+	/* Keep mobile dropdown visible above page layers */
+	.tmc-navbar,
+	.tmc-navbar .container,
+	.tmc-dropdown-hover {
+		overflow: visible !important;
+	}
+	.tmc-dropdown-hover {
+		position: relative;
+		z-index: 1090;
+	}
+
 	/* Container side padding tighter for edge-to-edge feel */
 	.container { padding-left: 1rem; padding-right: 1rem; }
 
