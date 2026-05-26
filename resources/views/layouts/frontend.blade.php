@@ -26,6 +26,12 @@
             ['url' => $siteConfig['social_linkedin_url'] ?? '', 'icon' => 'bi-linkedin'],
         ];
         $socialLinks = array_values(array_filter($socialLinks, fn ($link) => filled($link['url'])));
+        $developerBrandName = trim((string) ($siteConfig['developer_brand_name'] ?? 'AhaNova AI Technologies Pvt. Ltd.'));
+        $developerLogoUrl = trim((string) ($siteConfig['developer_logo_url'] ?? ''));
+        $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
+        if ($developerLogoUrl === '' && file_exists(public_path('assets/images/ahanova-logo.png'))) {
+            $developerLogoUrl = asset('assets/images/ahanova-logo.png');
+        }
         $pageMenus = $globalMenus->filter(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
         $siteMenus = $globalMenus->reject(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
     @endphp
@@ -167,11 +173,18 @@
             <div class="d-flex flex-wrap justify-content-between gap-2 small text-light-emphasis">
                 <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
                 <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
-                <a href="#" class="tmc-powered-by" aria-label="AhaNova AI Technologies Pvt Ltd">
-                    <span class="tmc-powered-by__mark">A</span>
-                    <span class="tmc-powered-by__text-wrap">
-                        <strong class="tmc-powered-by__name">AhaNova</strong>
-                        <span class="tmc-powered-by__sub">AI Technologies Pvt Ltd</span>
+                <a
+                    href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
+                    class="tmc-developer-credit"
+                    @if($developerWebsiteUrl !== '') target="_blank" rel="noopener" @endif
+                    aria-label="Developed by {{ $developerBrandName }}"
+                >
+                    @if($developerLogoUrl !== '')
+                        <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo" class="tmc-developer-credit__logo" loading="lazy" decoding="async">
+                    @endif
+                    <span class="tmc-developer-credit__meta">
+                        <span class="tmc-developer-credit__label">Developed by</span>
+                        <strong class="tmc-developer-credit__name">{{ $developerBrandName }}</strong>
                     </span>
                 </a>
             </div>

@@ -3175,50 +3175,62 @@ html.reveal-init [data-section-reveal].is-visible {
 	.quick-links-grid { grid-template-columns: 1fr 1fr; gap: .35rem .75rem; }
 
 
-	/* ============ BRAND SIGNATURE ============ */
-	.tmc-powered-by {
+	/* ============ DEVELOPER CREDIT ============ */
+	.tmc-developer-credit {
 		display: inline-flex;
 		align-items: center;
-		gap: .5rem;
-		padding: .32rem .56rem;
-		border-radius: 999px;
-		border: 1px solid rgba(77, 183, 255, .35);
-		background: linear-gradient(135deg, rgba(6, 15, 34, .9), rgba(17, 12, 36, .9));
+		gap: .65rem;
+		padding: .42rem .62rem;
+		border-radius: .9rem;
+		border: 1px solid rgba(77, 183, 255, .22);
+		background: linear-gradient(140deg, rgba(8,20,42,.92), rgba(20,10,45,.86));
 		text-decoration: none;
-		box-shadow: 0 0 16px rgba(77,183,255,.15), inset 0 0 20px rgba(184,65,255,.1);
+		box-shadow: 0 8px 20px rgba(0,0,0,.26), inset 0 0 22px rgba(184,65,255,.08);
+		transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
 	}
-	.tmc-powered-by__mark {
-		display: inline-grid;
-		place-items: center;
-		width: 1.4rem;
-		height: 1.4rem;
-		border-radius: 50%;
-		font-family: var(--font-display);
-		font-size: .92rem;
-		font-weight: 800;
-		color: #ffffff;
-		background: linear-gradient(145deg, #20d5ff, #0f74ff 55%, #cb4dff);
-		box-shadow: 0 0 10px rgba(32, 213, 255, .45);
+	.tmc-developer-credit:hover {
+		transform: translateY(-2px);
+		border-color: rgba(215, 91, 255, .45);
+		box-shadow: 0 14px 30px rgba(0,0,0,.34), inset 0 0 26px rgba(32,213,255,.12);
 	}
-	.tmc-powered-by__text-wrap {
+	.tmc-developer-credit__logo {
+		height: 2rem;
+		width: auto;
+		display: block;
+		border-radius: .45rem;
+		object-fit: contain;
+		background: rgba(0,0,0,.28);
+		padding: .12rem;
+	}
+	.tmc-developer-credit__meta {
 		display: inline-flex;
 		flex-direction: column;
 		line-height: 1.05;
 	}
-	.tmc-powered-by__name {
-		font-size: .86rem;
+	.tmc-developer-credit__label {
+		font-size: .58rem;
+		letter-spacing: .13em;
+		text-transform: uppercase;
+		color: rgba(180, 210, 255, .82);
+	}
+	.tmc-developer-credit__name {
+		font-size: .82rem;
 		font-weight: 800;
-		letter-spacing: .02em;
-		background: linear-gradient(90deg, #ffffff 0%, #19d8ff 45%, #2c88ff 72%, #d75bff 100%);
+		letter-spacing: .01em;
+		background: linear-gradient(90deg, #ffffff 0%, #19d8ff 48%, #2c88ff 72%, #d75bff 100%);
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
-	.tmc-powered-by__sub {
-		font-size: .54rem;
-		letter-spacing: .14em;
-		text-transform: uppercase;
-		color: rgba(156, 214, 255, .95);
+
+	@media (max-width: 575.98px) {
+		.tmc-developer-credit {
+			width: 100%;
+			justify-content: center;
+		}
+		.tmc-developer-credit__logo {
+			height: 1.65rem;
+		}
 	}
 	/* WhatsApp float lift above iOS safe area */
 	.whatsapp-float { bottom: calc(env(safe-area-inset-bottom, 0px) + 16px) !important; right: 16px !important; }

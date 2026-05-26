@@ -73,6 +73,9 @@ class AppServiceProvider extends ServiceProvider
                             'social_youtube_url' => (string) ($rows->get('social_youtube_url') ?: ''),
                             'social_twitter_url' => (string) ($rows->get('social_twitter_url') ?: ''),
                             'social_linkedin_url' => (string) ($rows->get('social_linkedin_url') ?: ''),
+                            'developer_brand_name' => (string) ($rows->get('developer_brand_name') ?: $shared['siteConfig']['developer_brand_name']),
+                            'developer_logo_url' => (string) ($rows->get('developer_logo_url') ?: ''),
+                            'developer_website_url' => (string) ($rows->get('developer_website_url') ?: ''),
                         ]);
                     }
                 } catch (Throwable) {
@@ -105,6 +108,9 @@ class AppServiceProvider extends ServiceProvider
             'social_youtube_url' => '',
             'social_twitter_url' => '',
             'social_linkedin_url' => '',
+            'developer_brand_name' => 'AhaNova AI Technologies Pvt. Ltd.',
+            'developer_logo_url' => '',
+            'developer_website_url' => '',
         ];
     }
 
