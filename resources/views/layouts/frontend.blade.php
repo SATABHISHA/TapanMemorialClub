@@ -219,9 +219,11 @@
                 </div>
             </div>
             <hr class="border-secondary my-4">
-            <div class="d-flex flex-wrap justify-content-between gap-2 small text-light-emphasis">
-                <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
-                <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="d-flex flex-column gap-1 small text-light-emphasis">
+                    <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
+                    <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
+                </div>
                 @if($developerLogoVisible && $developerLogoUrl !== '')
                     <a
                         href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
