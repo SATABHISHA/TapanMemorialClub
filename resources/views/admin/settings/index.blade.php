@@ -247,6 +247,22 @@
                             </label>
                         </div>
                     </div>
+
+                    {{-- Size control --}}
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Display Size</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="range" class="form-range" style="flex:1"
+                                   name="settings[club_logo_size]"
+                                   min="40" max="160" step="4"
+                                   value="{{ $valueOf('club_logo_size', '68') }}"
+                                   id="club-logo-size-range">
+                            <span class="badge bg-info text-dark fw-bold" id="club-logo-size-badge"
+                                  style="min-width:52px;font-size:.85rem;">{{ $valueOf('club_logo_size', '68') }} px</span>
+                        </div>
+                        <div class="form-text text-light-emphasis" id="club-logo-size-hint"></div>
+                    </div>
+
                     <div class="col-12">
                         <button class="btn btn-gold btn-sm">Save Club Logo</button>
                     </div>
@@ -348,6 +364,22 @@
                             </label>
                         </div>
                     </div>
+
+                    {{-- Size control --}}
+                    <div class="col-12">
+                        <label class="form-label small text-uppercase text-warning">Logo Height</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="range" class="form-range" style="flex:1"
+                                   name="settings[developer_logo_height]"
+                                   min="24" max="200" step="4"
+                                   value="{{ $valueOf('developer_logo_height', '60') }}"
+                                   id="dev-logo-height-range">
+                            <span class="badge bg-info text-dark fw-bold" id="dev-logo-height-badge"
+                                  style="min-width:52px;font-size:.85rem;">{{ $valueOf('developer_logo_height', '60') }} px</span>
+                        </div>
+                        <div class="form-text text-light-emphasis">Width adjusts automatically. Drag to resize the logo in the footer.</div>
+                    </div>
+
                     <div class="col-12">
                         <button class="btn btn-gold btn-sm">Save Company Logo</button>
                     </div>
@@ -519,6 +551,53 @@
                 if (url) { preview.src = url; preview.style.display = ''; }
             });
         });
+    })();
+
+    // Club logo size slider — live preview
+    (() => {
+        const range   = document.getElementById('club-logo-size-range');
+        const badge   = document.getElementById('club-logo-size-badge');
+        const hint    = document.getElementById('club-logo-size-hint');
+        const preview = document.getElementById('club-logo-preview');
+        if (!range) return;
+
+        function applyClubSize(val) {
+            const v = parseInt(val, 10);
+            badge.textContent = v + ' px';
+            if (hint) hint.textContent =
+                `Navbar: ${v}px · Footer: ${Math.round(v * 0.71)}px · Loading screen: ${Math.round(v * 1.18)}px`;
+            if (preview) {
+                preview.style.width  = v + 'px';
+                preview.style.height = v + 'px';
+                preview.style.borderRadius = '50%';
+                preview.style.objectFit   = 'cover';
+                preview.style.maxWidth    = 'none';
+            }
+        }
+        applyClubSize(range.value);
+        range.addEventListener('input', () => applyClubSize(range.value));
+    })();
+
+    // Developer logo height slider — live preview
+    (() => {
+        const range   = document.getElementById('dev-logo-height-range');
+        const badge   = document.getElementById('dev-logo-height-badge');
+        const preview = document.getElementById('dev-logo-preview');
+        if (!range) return;
+
+        function applyDevHeight(val) {
+            const h = parseInt(val, 10);
+            badge.textContent = h + ' px';
+            if (preview) {
+                preview.style.height   = h + 'px';
+                preview.style.width    = 'auto';
+                preview.style.maxWidth = 'min(320px, 64vw)';
+                preview.style.borderRadius = '6px';
+                preview.style.objectFit    = 'contain';
+            }
+        }
+        applyDevHeight(range.value);
+        range.addEventListener('input', () => applyDevHeight(range.value));
     })();
 </script>
 @endsection

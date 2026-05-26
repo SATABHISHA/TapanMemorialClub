@@ -30,18 +30,27 @@
         $developerLogoUrl = trim((string) ($siteConfig['developer_logo_url'] ?? ''));
         $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
 
-        // Read visibility flags directly from DB to guarantee fresh values regardless of any
-        // server-side caching layer (OPcache, FPM static variables, etc.).
-        // This is a single cheap query on an indexed key — negligible overhead.
+        // Read visibility flags AND size settings directly from DB to guarantee fresh values
+        // regardless of any server-side caching layer (OPcache, FPM static variables, etc.).
         try {
             $_visRows = \App\Models\Setting::query()
-                ->whereIn('key', ['developer_logo_visible', 'club_logo_visible'])
+                ->whereIn('key', ['developer_logo_visible', 'club_logo_visible', 'club_logo_size', 'developer_logo_height'])
                 ->pluck('value', 'key');
             $developerLogoVisible = ($_visRows->get('developer_logo_visible') ?? '1') !== '0';
             $clubLogoVisible      = ($_visRows->get('club_logo_visible')      ?? '1') !== '0';
+            // Club logo size (navbar, footer, preloader scale proportionally from one base value)
+            $clubLogoSize         = max(40, min(160, (int) ($_visRows->get('club_logo_size') ?: 68)));
+            $clubFooterSize       = (int) round($clubLogoSize * 0.71);
+            $clubPreloaderSize    = (int) round($clubLogoSize * 1.18);
+            // Developer/company logo height in footer
+            $developerLogoHeight  = max(24, min(200, (int) ($_visRows->get('developer_logo_height') ?: 60)));
         } catch (\Throwable) {
             $developerLogoVisible = ($siteConfig['developer_logo_visible'] ?? '1') !== '0';
             $clubLogoVisible      = ($siteConfig['club_logo_visible']      ?? '1') !== '0';
+            $clubLogoSize         = 68;
+            $clubFooterSize       = 48;
+            $clubPreloaderSize    = 80;
+            $developerLogoHeight  = 60;
         }
 
         if ($developerLogoVisible && $developerLogoUrl === '') {
@@ -70,7 +79,8 @@
     <div id="preloader" class="tmc-preloader">
         <div class="preloader-ring">
             @if($clubLogoVisible)
-                <img src="{{ $clubLogoUrl }}" alt="Tapan Memorial Club" class="tmc-preloader-logo">
+                <img src="{{ $clubLogoUrl }}" alt="Tapan Memorial Club" class="tmc-preloader-logo"
+                     style="width:{{ $clubPreloaderSize }}px;height:{{ $clubPreloaderSize }}px;border-radius:50%;object-fit:cover;">
             @endif
         </div>
         <p class="preloader-text">Loading Franchise Experience<span class="dots"></span></p>
@@ -106,7 +116,8 @@
         <div class="container py-2 d-flex align-items-center flex-nowrap gap-2">
             <a class="navbar-brand brand-lockup flex-shrink-0" href="{{ route('home') }}">
                 @if($clubLogoVisible)
-                    <img src="{{ $clubLogoUrl }}" alt="TMC" class="brand-logo">
+                    <img src="{{ $clubLogoUrl }}" alt="TMC" class="brand-logo"
+                         style="width:{{ $clubLogoSize }}px;height:{{ $clubLogoSize }}px;border-radius:50%;object-fit:cover;">
                 @endif
                 <div class="brand-lockup__text">
                     <span class="brand-text">Tapan Memorial Club</span>
@@ -164,7 +175,8 @@
                 <div class="col-lg-4">
                     <div class="footer-brand mb-3">
                         @if($clubLogoVisible)
-                            <img src="{{ $clubLogoUrl }}" class="footer-logo" alt="Logo">
+                            <img src="{{ $clubLogoUrl }}" class="footer-logo" alt="Logo"
+                                 style="width:{{ $clubFooterSize }}px;height:{{ $clubFooterSize }}px;border-radius:50%;object-fit:cover;">
                         @endif
                         <div class="footer-brand__text">
                             <h4 class="gradient-text mb-0">Tapan Memorial Club</h4>
@@ -217,7 +229,10 @@
                         @if($developerWebsiteUrl !== '') target="_blank" rel="noopener" @endif
                         aria-label="{{ $developerBrandName }}"
                     >
-                        <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo" class="tmc-brand-signature__logo" loading="lazy" decoding="async">
+                        <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo"
+                             class="tmc-brand-signature__logo"
+                             style="height:{{ $developerLogoHeight }}px;width:auto;max-width:min(320px,64vw);object-fit:contain;display:block;"
+                             loading="lazy" decoding="async">
                     </a>
                 @endif
             </div>
