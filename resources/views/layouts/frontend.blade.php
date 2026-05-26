@@ -29,8 +29,19 @@
         $developerBrandName = trim((string) ($siteConfig['developer_brand_name'] ?? 'AhaNova AI Technologies Pvt. Ltd.'));
         $developerLogoUrl = trim((string) ($siteConfig['developer_logo_url'] ?? ''));
         $developerWebsiteUrl = trim((string) ($siteConfig['developer_website_url'] ?? ''));
-        if ($developerLogoUrl === '' && file_exists(public_path('assets/images/ahanova-logo.png'))) {
-            $developerLogoUrl = asset('assets/images/ahanova-logo.png');
+        if ($developerLogoUrl === '') {
+            $logoCandidates = [
+                'assets/images/ahanova-logo.png',
+                'assets/images/ahanova-logo.jpg',
+                'assets/images/ahanova-logo.jpeg',
+                'assets/images/ahanova-logo.webp',
+            ];
+            foreach ($logoCandidates as $candidate) {
+                if (file_exists(public_path($candidate))) {
+                    $developerLogoUrl = asset($candidate);
+                    break;
+                }
+            }
         }
         $pageMenus = $globalMenus->filter(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
         $siteMenus = $globalMenus->reject(fn ($menu) => str_starts_with((string) ($menu->url ?? ''), '/pages/'))->values();
@@ -173,19 +184,16 @@
             <div class="d-flex flex-wrap justify-content-between gap-2 small text-light-emphasis">
                 <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
                 <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
-                <a
-                    href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
-                    class="tmc-brand-signature"
-                    @if($developerWebsiteUrl !== '') target="_blank" rel="noopener" @endif
-                    aria-label="{{ $developerBrandName }}"
-                >
-                    @if($developerLogoUrl !== '')
+                @if($developerLogoUrl !== '')
+                    <a
+                        href="{{ $developerWebsiteUrl !== '' ? $developerWebsiteUrl : '#' }}"
+                        class="tmc-brand-signature tmc-brand-signature--logo-only"
+                        @if($developerWebsiteUrl !== '') target="_blank" rel="noopener" @endif
+                        aria-label="{{ $developerBrandName }}"
+                    >
                         <img src="{{ $developerLogoUrl }}" alt="{{ $developerBrandName }} logo" class="tmc-brand-signature__logo" loading="lazy" decoding="async">
-                    @else
-                        <span class="tmc-brand-signature__glyph" aria-hidden="true">A</span>
-                    @endif
-                    <strong class="tmc-brand-signature__name">{{ $developerBrandName }}</strong>
-                </a>
+                    </a>
+                @endif
             </div>
         </div>
     </footer>
