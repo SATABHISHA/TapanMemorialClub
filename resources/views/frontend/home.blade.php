@@ -126,8 +126,8 @@
         <div class="container position-relative">
             <div class="section-head text-center" data-aos="fade-up">
                 <span class="eyebrow">Our Heritage</span>
-                <h2>The Club <span class="gradient-text">Story</span></h2>
-                <p>Eighty-plus years of bat, ball, and brotherhood — woven into the maroon-and-blue fabric of Kolkata cricket.</p>
+                <h2>{{ $historyTitle }}</h2>
+                <p>{{ $historySummary }}</p>
             </div>
 
             <div class="row g-4 mt-3">
@@ -205,10 +205,18 @@
                     </aside>
 
                     <div class="story-main">
-                        <span class="story-quote"><i class="bi bi-quote"></i> A Story That Began In The Monsoon</span>
+                        <span class="story-quote"><i class="bi bi-quote"></i> {{ $historyTitle }}</span>
                         <p class="story-teaser">
                             <span class="story-teaser-lead">{{ mb_substr($teaserText, 0, 1) }}</span>{{ mb_substr($teaserText, 1) }}
                         </p>
+
+                        @if(!empty($historyPage?->slug))
+                            <div class="mb-3">
+                                <a href="{{ route('pages.show', $historyPage->slug) }}" class="btn btn-outline-gold btn-sm">
+                                    <i class="bi bi-eye"></i> Preview Full History Page
+                                </a>
+                            </div>
+                        @endif
 
                         @if($hasMore)
                             <div class="story-full" id="storyFull" aria-hidden="true">

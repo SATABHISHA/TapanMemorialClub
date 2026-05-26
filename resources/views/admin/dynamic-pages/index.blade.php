@@ -82,7 +82,7 @@
             </div>
         </div>
         <div class="col-12">
-            <button class="btn btn-gold">Create Page & Menu</button>
+            <button class="btn btn-gold">Create & Publish Page</button>
         </div>
     </form>
 </div>
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
                             <div class="col-12 d-flex gap-2 flex-wrap">
-                                <button class="btn btn-gold">Save Changes</button>
+                                <button class="btn btn-gold">Save / Publish</button>
                                 <a href="{{ route('pages.show', $page->slug) }}" class="btn btn-outline-light" target="_blank" rel="noopener">Preview Page</a>
                             </div>
                         </form>

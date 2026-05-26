@@ -167,6 +167,13 @@
             <div class="d-flex flex-wrap justify-content-between gap-2 small text-light-emphasis">
                 <span>&copy; {{ date('Y') }} Tapan Memorial Club. All rights reserved.</span>
                 <span>Crafted with <span class="text-danger">♥</span> for the love of cricket.</span>
+                <a href="#" class="tmc-powered-by" aria-label="AhaNova AI Technologies Pvt Ltd">
+                    <span class="tmc-powered-by__mark">A</span>
+                    <span class="tmc-powered-by__text-wrap">
+                        <strong class="tmc-powered-by__name">AhaNova</strong>
+                        <span class="tmc-powered-by__sub">AI Technologies Pvt Ltd</span>
+                    </span>
+                </a>
             </div>
         </div>
     </footer>

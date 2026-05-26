@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Achievement;
+use App\Models\DynamicPage;
 use App\Models\GalleryImage;
 use App\Models\Setting;
 use App\Models\Slider;
@@ -54,8 +55,17 @@ class HomeController extends Controller
             ->orderByDesc('published_at')
             ->limit(6)
             ->get();
-        $introText = (string) Setting::query()->where('key', 'club_intro_text')->value('value');
+        $historyPage = DynamicPage::query()
+            ->where('slug', 'history-of-the-club')
+            ->where('is_published', true)
+            ->first();
+
+        $introText = $historyPage
+            ? (string) ($historyPage->content ?? '')
+            : (string) Setting::query()->where('key', 'club_intro_text')->value('value');
         $performanceText = (string) Setting::query()->where('key', 'club_performance_text')->value('value');
+        $historyTitle = (string) ($historyPage?->title ?? 'The Club Story');
+        $historySummary = (string) ($historyPage?->description ?? 'Eighty-plus years of bat, ball, and brotherhood — woven into the maroon-and-blue fabric of Kolkata cricket.');
 
         return view('frontend.home', compact(
             'sliders',
@@ -68,7 +78,10 @@ class HomeController extends Controller
             'founders',
             'sponsors',
             'introText',
-            'performanceText'
+            'performanceText',
+            'historyPage',
+            'historyTitle',
+            'historySummary'
         ));
     }
 }
