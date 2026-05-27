@@ -125,11 +125,28 @@ class SettingController extends Controller
             if ($request->hasFile($inputName) && $request->file($inputName)->isValid()) {
                 $file     = $request->file($inputName);
                 $ext      = strtolower($file->getClientOriginalExtension());
-                $filename = $config['name'] . '.' . $ext;
+                // Embed the version in the filename (not a query string) so every
+                // upload gets a completely new URL that no browser cache can serve
+                // from a previously cached copy — query strings are sometimes ignored
+                // by Chrome's disk cache and service workers.
+                $version  = time();
+                $filename = $config['name'] . '-' . $version . '.' . $ext;
+
+                // Delete all previous versioned uploads for this logo slot to
+                // avoid accumulating stale files on the server.
+                foreach (glob(public_path('assets/images/' . $config['name'] . '-*')) ?: [] as $old) {
+                    @unlink($old);
+                }
+                // Also delete the old fixed-name file if it exists (legacy format).
+                foreach (['jpg', 'jpeg', 'png', 'webp', 'gif'] as $oldExt) {
+                    $legacyPath = public_path('assets/images/' . $config['name'] . '.' . $oldExt);
+                    if (file_exists($legacyPath)) {
+                        @unlink($legacyPath);
+                    }
+                }
+
                 $file->move(public_path('assets/images'), $filename);
-                // Append a version timestamp so browsers always fetch the new file
-                // instead of serving a cached copy of the previous image.
-                $payload[$config['key']] = asset('assets/images/' . $filename) . '?v=' . time();
+                $payload[$config['key']] = asset('assets/images/' . $filename);
             }
         }
 
