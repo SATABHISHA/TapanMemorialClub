@@ -402,7 +402,7 @@
                                         <div class="spotlight-meta">
                                             <span class="spotlight-tag">{{ strtoupper($item->category ?? 'TMC') }}</span>
                                             <h5>{{ $item->title ?: 'Tapan Memorial Club' }}</h5>
-                                            <small>Frame #{{ str_pad((string)($loop->index + 1), 2, '0', STR_PAD_LEFT) }} · TMC Archive</small>
+                                            <small>Frame #{{ str_pad((string)($loop->index + 1), 2, '0', STR_PAD_LEFT) }} · Tapan Memorial Club's Archive</small>
                                         </div>
                                     </article>
                                 </div>
