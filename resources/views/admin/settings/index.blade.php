@@ -325,18 +325,11 @@
                             $devStoredUrl = $valueOf('developer_logo_url');
                             $devPreviewSrc = $devStoredUrl;
                             if (!$devPreviewSrc) {
-                                // Look for versioned files first (e.g. ahanova-logo-1748390000.png)
-                                $devVersioned = glob(public_path('assets/images/ahanova-logo-*')) ?: [];
-                                if ($devVersioned) {
-                                    usort($devVersioned, fn($a, $b) => filemtime($b) - filemtime($a));
-                                    $devPreviewSrc = asset('assets/images/' . basename($devVersioned[0]));
-                                } else {
-                                    // Fall back to legacy fixed-name files
-                                    foreach (['ahanova-logo.png','ahanova-logo.jpg','ahanova-logo.jpeg','ahanova-logo.webp'] as $c) {
-                                        if (file_exists(public_path('assets/images/'.$c))) {
-                                            $devPreviewSrc = asset('assets/images/'.$c) . '?v=' . filemtime(public_path('assets/images/'.$c));
-                                            break;
-                                        }
+                                foreach (['ahanova-logo.png','ahanova-logo.jpg','ahanova-logo.jpeg','ahanova-logo.webp'] as $c) {
+                                    if (file_exists(public_path('assets/images/'.$c))) {
+                                        // Add cache-buster based on file modification time
+                                        $devPreviewSrc = asset('assets/images/'.$c) . '?v=' . filemtime(public_path('assets/images/'.$c));
+                                        break;
                                     }
                                 }
                             }
