@@ -187,10 +187,6 @@
                                     <div class="orb-val"><b>84+</b><span>Years</span></div>
                                 </div>
                                 <div class="stat-orb">
-                                    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" class="ring-bg"/><circle cx="32" cy="32" r="28" class="ring-fg gold" style="--p:72"/></svg>
-                                    <div class="orb-val"><b>15+</b><span>Trophies</span></div>
-                                </div>
-                                <div class="stat-orb">
                                     <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" class="ring-bg"/><circle cx="32" cy="32" r="28" class="ring-fg sky" style="--p:95"/></svg>
                                     <div class="orb-val"><b>200+</b><span>Players</span></div>
                                 </div>
@@ -209,14 +205,6 @@
                         <p class="story-teaser">
                             <span class="story-teaser-lead">{{ mb_substr($teaserText, 0, 1) }}</span>{{ mb_substr($teaserText, 1) }}
                         </p>
-
-                        @if(!empty($historyPage?->slug))
-                            <div class="mb-3">
-                                <a href="{{ route('pages.show', $historyPage->slug) }}" class="btn btn-outline-gold btn-sm">
-                                    <i class="bi bi-eye"></i> Preview Full History Page
-                                </a>
-                            </div>
-                        @endif
 
                         @if($hasMore)
                             <div class="story-full" id="storyFull" aria-hidden="true">
