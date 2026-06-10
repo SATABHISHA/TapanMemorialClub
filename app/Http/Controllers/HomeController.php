@@ -56,9 +56,8 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
         $historyPage = DynamicPage::query()
-            ->whereIn('slug', ['history-of-the-club', 'our-journey'])
+            ->where('slug', 'history-of-the-club')
             ->where('is_published', true)
-            ->orderByRaw("CASE WHEN slug = 'history-of-the-club' THEN 0 WHEN slug = 'our-journey' THEN 1 ELSE 2 END")
             ->first();
 
         $introText = $historyPage
