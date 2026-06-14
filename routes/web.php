@@ -60,6 +60,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('sliders', SliderController::class);
         Route::resource('gallery', GalleryController::class);
         Route::post('performances/recap-text', [PerformanceController::class, 'updateRecapText'])->name('performances.recap-text');
+        Route::post('performances/visibility', [PerformanceController::class, 'updateVisibility'])->name('performances.visibility');
         Route::resource('performances', PerformanceController::class);
         Route::resource('blogs', BlogController::class);
         Route::resource('dynamic-pages', AdminDynamicPageController::class)->except(['show', 'create', 'edit']);

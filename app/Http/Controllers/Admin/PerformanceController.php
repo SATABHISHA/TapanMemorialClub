@@ -23,8 +23,27 @@ class PerformanceController extends Controller
     {
         $performances = $this->performanceService->paginateAdmin(20);
         $performanceText = (string) Setting::query()->where('key', 'club_performance_text')->value('value');
+        $isTournamentRecordsVisible = (string) Setting::query()
+            ->where('key', 'club_tournament_records_visible')
+            ->value('value') !== '0';
+        $isPerformanceRecapVisible = (string) Setting::query()
+            ->where('key', 'club_performance_recap_visible')
+            ->value('value') !== '0';
+        $isPerformanceSummaryVisible = (string) Setting::query()
+            ->where('key', 'club_performance_summary_visible')
+            ->value('value') !== '0';
+        $isIntroductionFeatureCardsVisible = (string) Setting::query()
+            ->where('key', 'club_introduction_feature_cards_visible')
+            ->value('value') !== '0';
 
-        return view('admin.performances.index', compact('performances', 'performanceText'));
+        return view('admin.performances.index', compact(
+            'performances',
+            'performanceText',
+            'isTournamentRecordsVisible',
+            'isPerformanceRecapVisible',
+            'isPerformanceSummaryVisible',
+            'isIntroductionFeatureCardsVisible'
+        ));
     }
 
     /**
@@ -47,6 +66,93 @@ class PerformanceController extends Controller
         );
 
         return back()->with('status', 'Performance recap updated.');
+    }
+
+    /**
+     * Toggle homepage performance section visibility.
+     */
+    public function updateVisibility(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'club_tournament_records_visible' => ['nullable', 'boolean'],
+            'club_performance_recap_visible' => ['nullable', 'boolean'],
+            'club_performance_summary_visible' => ['nullable', 'boolean'],
+            'club_introduction_feature_cards_visible' => ['nullable', 'boolean'],
+        ]);
+
+        if (array_key_exists('club_introduction_feature_cards_visible', $data)) {
+            $isIntroductionFeatureCardsVisible = (bool) $data['club_introduction_feature_cards_visible'];
+
+            Setting::query()->updateOrCreate(
+                ['key' => 'club_introduction_feature_cards_visible'],
+                [
+                    'group' => 'club',
+                    'type' => 'boolean',
+                    'is_public' => true,
+                    'value' => $isIntroductionFeatureCardsVisible ? '1' : '0',
+                ]
+            );
+
+            return back()->with('status', $isIntroductionFeatureCardsVisible
+                ? 'Introduction feature cards are now visible on the website.'
+                : 'Introduction feature cards are now hidden from the website.');
+        }
+
+        if (array_key_exists('club_performance_summary_visible', $data)) {
+            $isPerformanceSummaryVisible = (bool) $data['club_performance_summary_visible'];
+
+            Setting::query()->updateOrCreate(
+                ['key' => 'club_performance_summary_visible'],
+                [
+                    'group' => 'club',
+                    'type' => 'boolean',
+                    'is_public' => true,
+                    'value' => $isPerformanceSummaryVisible ? '1' : '0',
+                ]
+            );
+
+            return back()->with('status', $isPerformanceSummaryVisible
+                ? 'Performance summary section is now visible on the website.'
+                : 'Performance summary section is now hidden from the website.');
+        }
+
+        if (array_key_exists('club_tournament_records_visible', $data)) {
+            $isTournamentRecordsVisible = (bool) $data['club_tournament_records_visible'];
+
+            Setting::query()->updateOrCreate(
+                ['key' => 'club_tournament_records_visible'],
+                [
+                    'group' => 'club',
+                    'type' => 'boolean',
+                    'is_public' => true,
+                    'value' => $isTournamentRecordsVisible ? '1' : '0',
+                ]
+            );
+
+            return back()->with('status', $isTournamentRecordsVisible
+                ? 'Tournament records section is now visible on the website.'
+                : 'Tournament records section is now hidden from the website.');
+        }
+
+        if (array_key_exists('club_performance_recap_visible', $data)) {
+            $isPerformanceRecapVisible = (bool) $data['club_performance_recap_visible'];
+
+            Setting::query()->updateOrCreate(
+                ['key' => 'club_performance_recap_visible'],
+                [
+                    'group' => 'club',
+                    'type' => 'boolean',
+                    'is_public' => true,
+                    'value' => $isPerformanceRecapVisible ? '1' : '0',
+                ]
+            );
+
+            return back()->with('status', $isPerformanceRecapVisible
+                ? 'Performance recap section is now visible on the website.'
+                : 'Performance recap section is now hidden from the website.');
+        }
+
+        return back()->with('status', 'No visibility changes were submitted.');
     }
 
     /**

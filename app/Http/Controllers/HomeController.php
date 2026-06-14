@@ -63,7 +63,20 @@ class HomeController extends Controller
         $introText = $historyPage
             ? (string) ($historyPage->content ?? '')
             : (string) Setting::query()->where('key', 'club_intro_text')->value('value');
+        $showIntroductionFeatureCards = (string) Setting::query()
+            ->where('key', 'club_introduction_feature_cards_visible')
+            ->value('value') !== '0';
         $performanceText = (string) Setting::query()->where('key', 'club_performance_text')->value('value');
+        $showTournamentRecordsSection = (string) Setting::query()
+            ->where('key', 'club_tournament_records_visible')
+            ->value('value') !== '0';
+        $showPerformanceRecapSection = (string) Setting::query()
+            ->where('key', 'club_performance_recap_visible')
+            ->value('value') !== '0';
+        $showPerformanceSummarySection = (string) Setting::query()
+            ->where('key', 'club_performance_summary_visible')
+            ->value('value') !== '0';
+        $showPerformanceSection = $showTournamentRecordsSection || $showPerformanceRecapSection || $showPerformanceSummarySection;
         $historyTitle = (string) ($historyPage?->title ?? 'The Club Story');
         $historySummary = (string) ($historyPage?->description ?? 'Eighty-plus years of bat, ball, and brotherhood — woven into the maroon-and-blue fabric of Kolkata cricket.');
 
@@ -78,7 +91,12 @@ class HomeController extends Controller
             'founders',
             'sponsors',
             'introText',
+            'showIntroductionFeatureCards',
             'performanceText',
+            'showTournamentRecordsSection',
+            'showPerformanceRecapSection',
+            'showPerformanceSummarySection',
+            'showPerformanceSection',
             'historyPage',
             'historyTitle',
             'historySummary'

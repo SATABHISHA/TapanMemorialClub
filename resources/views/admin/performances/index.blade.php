@@ -8,6 +8,117 @@
     </div>
 @endif
 
+{{-- ========== HOMEPAGE VISIBILITY CONTROLS ========== --}}
+<div class="glass-card p-4 mb-4" style="border:1px solid rgba(212,175,55,.25);">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+            <h5 class="mb-1 text-warning"><i class="bi bi-display"></i> Homepage Performance Visibility Controls</h5>
+            <small class="text-light-emphasis">Control introduction cards, summary cards, Tournament Records, and Performance Recap independently on the public homepage.</small>
+        </div>
+        <a href="{{ url('/#live-performance') }}" target="_blank" class="btn btn-sm btn-outline-info">
+            <i class="bi bi-eye"></i> Preview on Site
+        </a>
+    </div>
+    <div class="row g-3">
+        <div class="col-lg-3">
+            <form method="POST" action="{{ route('admin.performances.visibility') }}" class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                @csrf
+                <input type="hidden" name="club_introduction_feature_cards_visible" value="0">
+                <div class="form-check form-switch m-0">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        name="club_introduction_feature_cards_visible"
+                        value="1"
+                        id="clubIntroductionFeatureCardsVisible"
+                        onchange="this.form.submit()"
+                        @checked($isIntroductionFeatureCardsVisible ?? true)
+                    >
+                    <label class="form-check-label" for="clubIntroductionFeatureCardsVisible">
+                        {{ ($isIntroductionFeatureCardsVisible ?? true) ? 'Intro Feature Cards: Visible (Unhide)' : 'Intro Feature Cards: Hidden (Hide)' }}
+                    </label>
+                </div>
+                <button class="btn btn-gold btn-sm">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-3">
+            <form method="POST" action="{{ route('admin.performances.visibility') }}" class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                @csrf
+                <input type="hidden" name="club_performance_summary_visible" value="0">
+                <div class="form-check form-switch m-0">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        name="club_performance_summary_visible"
+                        value="1"
+                        id="clubPerformanceSummaryVisible"
+                        onchange="this.form.submit()"
+                        @checked($isPerformanceSummaryVisible ?? true)
+                    >
+                    <label class="form-check-label" for="clubPerformanceSummaryVisible">
+                        {{ ($isPerformanceSummaryVisible ?? true) ? 'Summary Cards: Visible (Unhide)' : 'Summary Cards: Hidden (Hide)' }}
+                    </label>
+                </div>
+                <button class="btn btn-gold btn-sm">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-3">
+            <form method="POST" action="{{ route('admin.performances.visibility') }}" class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                @csrf
+                <input type="hidden" name="club_tournament_records_visible" value="0">
+                <div class="form-check form-switch m-0">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        name="club_tournament_records_visible"
+                        value="1"
+                        id="clubTournamentRecordsVisible"
+                        onchange="this.form.submit()"
+                        @checked($isTournamentRecordsVisible ?? true)
+                    >
+                    <label class="form-check-label" for="clubTournamentRecordsVisible">
+                        {{ ($isTournamentRecordsVisible ?? true) ? 'Tournament Records: Visible (Unhide)' : 'Tournament Records: Hidden (Hide)' }}
+                    </label>
+                </div>
+                <button class="btn btn-gold btn-sm">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-3">
+            <form method="POST" action="{{ route('admin.performances.visibility') }}" class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                @csrf
+                <input type="hidden" name="club_performance_recap_visible" value="0">
+                <div class="form-check form-switch m-0">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        name="club_performance_recap_visible"
+                        value="1"
+                        id="clubPerformanceRecapVisible"
+                        onchange="this.form.submit()"
+                        @checked($isPerformanceRecapVisible ?? true)
+                    >
+                    <label class="form-check-label" for="clubPerformanceRecapVisible">
+                        {{ ($isPerformanceRecapVisible ?? true) ? 'Performance Recap: Visible (Unhide)' : 'Performance Recap: Hidden (Hide)' }}
+                    </label>
+                </div>
+                <button class="btn btn-gold btn-sm">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
 {{-- ========== PERFORMANCE RECAP TEXT EDITOR ========== --}}
 <div class="glass-card p-4 mb-4" style="border:1px solid rgba(212,175,55,.25);">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">

@@ -130,6 +130,7 @@
                 <p>{{ $historySummary }}</p>
             </div>
 
+            @if($showIntroductionFeatureCards ?? true)
             <div class="row g-4 mt-3">
                 <div class="col-lg-4" data-aos="zoom-in">
                     <div class="feature-card">
@@ -156,6 +157,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <div class="story-card mt-5" data-aos="fade-up">
                 <div class="story-grid">
@@ -477,9 +479,11 @@
     </section>
 
     {{-- ============== LIVE PERFORMANCE ============== --}}
+    @if($showPerformanceSection ?? true)
     <section class="section-pad position-relative" id="live-performance" data-section-reveal>
         <div class="section-blob blob-4"></div>
         <div class="container position-relative">
+            @if($showPerformanceSummarySection ?? true)
             <div class="section-head text-center" data-aos="fade-up">
                 <span class="eyebrow">Data Pavilion</span>
                 <h2>Live Performance <span class="gradient-text">Analytics</span></h2>
@@ -516,8 +520,10 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <div class="performance-card mt-4 perf-pavilion" data-aos="zoom-in">
+                @if($showTournamentRecordsSection ?? true)
                 {{-- Scoreboard top strip --}}
                 <div class="perf-scoreboard">
                     <div class="perf-scoreboard__crest">
@@ -557,8 +563,9 @@
                         </div>
                     </div>
                 @endif
+                @endif
 
-                @if(!empty($performanceText))
+                @if(($showPerformanceRecapSection ?? true) && !empty($performanceText))
                     @php
                         // Split the recap text into per-season cards by matching "YYYY-YY :" / "YYYY:" markers.
                         $seasonChunks = [];
@@ -612,6 +619,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============== SPONSORS ============== --}}
     <section class="section-pad bg-deep" id="sponsors">
